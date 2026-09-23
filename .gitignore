@@ -50,3 +50,4 @@ eslint.config.js
 
 .gitattributes
 .editorconfig
+.vscode/

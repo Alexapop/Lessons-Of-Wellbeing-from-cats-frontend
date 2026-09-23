@@ -1,4 +1,4 @@
-﻿# Lessons of Wellbeing from Cats
+# Lessons of Wellbeing from Cats
 
 This is my individual final project for the Factoría F5 Full Stack Development Bootcamp.
 
@@ -10,8 +10,8 @@ Visitors will be able to explore the sanctuary and its activities without loggin
 
 The project uses a decoupled architecture, with the frontend and backend maintained in separate repositories. This repository contains the frontend.
 
-- **Frontend repository:** To be added.
-- **Backend repository:** To be added.
+- **[Frontend repository](https://github.com/Alexapop/Lessons-Of-Wellbeing-from-cats-frontend)**
+- **[Backend repository](https://github.com/Alexapop/Lessons-Of-Wellbeing-from-cats-backend)**
 
 ## Planned Features
 
@@ -81,16 +81,16 @@ The frontend project is configured with:
 
 Links to the project Wiki and supporting documentation will be added as they become available.
 
-| Topic | Planned content | Link |
-| --- | --- | --- |
-| Getting Started | Environment setup, installation, and instructions for running the project locally. | To be added |
-| Agile Management & User Stories | Jira tracking, user stories, and acceptance criteria. | To be added |
-| Architecture | Frontend and backend responsibilities, application structure, and API integration. | To be added |
-| Security | Authentication, user and admin access, and protected reservations. | To be added |
-| Testing | Instructions for running unit and end-to-end tests. | To be added |
+| Topic                           | Planned content                                                                    | Link        |
+| ------------------------------- | ---------------------------------------------------------------------------------- | ----------- |
+| Getting Started                 | Environment setup, installation, and instructions for running the project locally. | To be added |
+| Agile Management & User Stories | Jira tracking, user stories, and acceptance criteria.                              | To be added |
+| Architecture                    | Frontend and backend responsibilities, application structure, and API integration. | To be added |
+| Security                        | Authentication, user and admin access, and protected reservations.                 | To be added |
+| Testing                         | Instructions for running unit and end-to-end tests.                                | To be added |
 
 ## Developer
 
-| Developer | GitHub |
-| --- | --- |
+| Developer | GitHub                                   |
+| --------- | ---------------------------------------- |
 | Alexa Pop | [@Alexapop](https://github.com/Alexapop) |

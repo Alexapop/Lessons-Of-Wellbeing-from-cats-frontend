@@ -1,8 +1,12 @@
+<script setup>
+import HeroSection from '../components/home/HeroSection.vue'
+</script>
+
 <template>
   <main class="home-sanctuary">
     <h1>Home &amp; Sanctuary</h1>
 
-    <!-- LWC-11: Hero section -->
+    <HeroSection />
     <!-- LWC-12: Mia & Thor section -->
     <!-- LWC-13: Lessons preview -->
     <!-- LWC-14: Yoga & Ayurveda section -->

@@ -240,10 +240,9 @@ const lessons = [
 .lessons__grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1px;
+  gap: 1.5rem 0;
   margin-top: 1.5rem;
-  border: 1px solid #e5e3e1;
-  background-color: #e5e3e1;
+  background-color: #fcfbf8;
 }
 
 .lesson-card {
@@ -251,6 +250,7 @@ const lessons = [
   flex-direction: column;
   min-width: 0;
   padding: 1rem;
+  border: 1px solid #e5e3e1;
   background-color: #ffffff;
 }
 
@@ -290,6 +290,8 @@ const lessons = [
 }
 
 .lesson-card__image-frame {
+  height: 240px;
+  overflow: hidden;
   border: 1px solid #e5e3e1;
   background-color: #fafaf9;
 }
@@ -297,9 +299,8 @@ const lessons = [
 .lesson-card__image {
   display: block;
   width: 100%;
-  height: auto;
-  max-height: 240px;
-  object-fit: contain;
+  height: 100%;
+  object-fit: cover;
 }
 
 .lesson-card__content {

@@ -1,14 +1,15 @@
 <script setup>
 import HeroSection from '../components/home/HeroSection.vue'
 import MiaThorSection from '../components/home/MiaThorSection.vue'
+import LessonsPreview from '../components/home/Lessons.vue'
 </script>
 
 <template>
   <main class="home-sanctuary">
     <HeroSection />
     <MiaThorSection />
+    <LessonsPreview />
 
-    <!-- LWC-13: Lessons preview -->
     <!-- LWC-14: Yoga & Ayurveda section -->
     <!-- LWC-15: Kombucha Lounge section -->
   </main>

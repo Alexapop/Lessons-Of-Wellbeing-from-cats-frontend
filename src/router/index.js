@@ -9,11 +9,6 @@ const router = createRouter({
       name: 'home',
       component: HomeSanctuary,
     },
-    {
-      path: '/about',
-      name: 'about',
-      component: () => import('../views/AboutView.vue'),
-    },
   ],
 })
 

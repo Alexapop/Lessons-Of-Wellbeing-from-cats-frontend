@@ -1,3 +1,10 @@
+:root {
+  --page-width: 1520px;
+  --section-title-size: clamp(1.5rem, 2.2vw, 2rem);
+  --section-text-size: 1rem;
+  --page-gutter: clamp(1rem, 10vw, 12rem);
+}
+
 *,
 *::before,
 *::after {
@@ -20,4 +27,9 @@ body {
 
 h1 {
   margin: 0;
+}
+@media (max-width: 1000px) {
+  :root {
+    --page-gutter: clamp(1rem, 4vw, 2rem);
+  }
 }

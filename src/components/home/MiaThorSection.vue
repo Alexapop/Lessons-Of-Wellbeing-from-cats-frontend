@@ -195,14 +195,14 @@ const cats = [
   margin: 0;
   color: #1c1917;
   font-family: Georgia, 'Times New Roman', serif;
-  font-size: clamp(2rem, 3vw, 2.75rem);
+  font-size: var(--section-title-size);
   line-height: 1.2;
 }
 
 .spotlight__description {
   margin: 1rem 0 0;
   color: #57534e;
-  font-size: 1.125rem;
+  font-size: var(--section-text-size);
 }
 
 .spotlight__cards {
@@ -284,7 +284,7 @@ const cats = [
   margin: 0;
   color: #1c1917;
   font-family: Georgia, 'Times New Roman', serif;
-  font-size: 2.25rem;
+  font-size: 1.75rem;
   line-height: 1.15;
 }
 

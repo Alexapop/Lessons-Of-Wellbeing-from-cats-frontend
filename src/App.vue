@@ -1,5 +1,6 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+import Footer from './components/layout/Footer.vue'
 </script>
 
 <template>
@@ -26,6 +27,7 @@ import { RouterLink, RouterView } from 'vue-router'
   </header>
 
   <RouterView />
+  <Footer />
 </template>
 
 <style scoped>
@@ -38,9 +40,10 @@ import { RouterLink, RouterView } from 'vue-router'
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 1520px;
+  width: calc(100% - 2 * var(--page-gutter));
+  max-width: var(--page-width);
   margin: 0 auto;
-  padding: 1.5rem 1rem;
+  padding: 1.5rem 0;
 }
 
 .site-nav__link {

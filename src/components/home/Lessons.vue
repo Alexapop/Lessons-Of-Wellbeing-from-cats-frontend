@@ -217,14 +217,14 @@ const lessons = [
   margin: 0;
   color: #1c1917;
   font-family: Georgia, 'Times New Roman', serif;
-  font-size: clamp(2rem, 3vw, 2.75rem);
+  font-size: var(--section-title-size);
   line-height: 1.2;
 }
 
 .lessons__introduction {
   margin-top: 1rem;
   color: #57534e;
-  font-size: 1.125rem;
+  font-size: var(--section-text-size);
   font-weight: 400;
   line-height: 1.65;
 }

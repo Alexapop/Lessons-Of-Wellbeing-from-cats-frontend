@@ -156,7 +156,7 @@ const pillars = [
   margin: 0;
   color: #1c1917;
   font-family: Georgia, 'Times New Roman', serif;
-  font-size: clamp(2rem, 3vw, 2.75rem);
+  font-size: var(--section-title-size);
   font-weight: 700;
   line-height: 1.2;
 }
@@ -172,7 +172,7 @@ const pillars = [
 .yoga__description {
   margin: 1.75rem 0 0;
   color: #57534e;
-  font-size: 1.125rem;
+  font-size: var(--section-text-size);
   line-height: 1.65;
 }
 
@@ -215,7 +215,7 @@ const pillars = [
   border-bottom: 1px solid #e5e3e1;
   color: #1c1917;
   font-family: Georgia, 'Times New Roman', serif;
-  font-size: 1.125rem;
+  font-size: var(--section-text-size);
   font-weight: 700;
   line-height: 1.4;
   text-transform: uppercase;

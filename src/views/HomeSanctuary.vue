@@ -2,6 +2,7 @@
 import HeroSection from '../components/home/HeroSection.vue'
 import MiaThorSection from '../components/home/MiaThorSection.vue'
 import LessonsPreview from '../components/home/Lessons.vue'
+import YogaAyurvedaSection from '@/components/home/YogaAyurvedaSection.vue'
 </script>
 
 <template>
@@ -9,8 +10,8 @@ import LessonsPreview from '../components/home/Lessons.vue'
     <HeroSection />
     <MiaThorSection />
     <LessonsPreview />
+    <YogaAyurvedaSection />
 
-    <!-- LWC-14: Yoga & Ayurveda section -->
     <!-- LWC-15: Kombucha Lounge section -->
   </main>
 </template>

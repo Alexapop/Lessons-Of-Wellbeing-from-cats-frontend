@@ -3,6 +3,7 @@ import HeroSection from '../components/home/HeroSection.vue'
 import MiaThorSection from '../components/home/MiaThorSection.vue'
 import LessonsPreview from '../components/home/Lessons.vue'
 import YogaAyurvedaSection from '@/components/home/YogaAyurvedaSection.vue'
+import KombuchaTeaLoungeSection from '@/components/home/KombuchaTeaLoungeSection.vue'
 </script>
 
 <template>
@@ -11,15 +12,15 @@ import YogaAyurvedaSection from '@/components/home/YogaAyurvedaSection.vue'
     <MiaThorSection />
     <LessonsPreview />
     <YogaAyurvedaSection />
-
-    <!-- LWC-15: Kombucha Lounge section -->
+    <KombuchaTeaLoungeSection />
   </main>
 </template>
 
 <style scoped>
 .home-sanctuary {
-  max-width: 1520px;
+  width: calc(100% - 2 * var(--page-gutter));
+  max-width: var(--page-width);
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 2rem 0;
 }
 </style>

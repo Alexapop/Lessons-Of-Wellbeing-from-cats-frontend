@@ -1,4 +1,5 @@
 <script setup>
+import { RouterLink } from 'vue-router'
 import miaImage from '../../docs/home-page/i-am-mia.png'
 import thorImage from '../../docs/home-page/i-am-thor.png'
 
@@ -138,8 +139,10 @@ const cats = [
             </span>
           </p>
 
-          <!-- LWC-16: Connect to the calendar filtered by host. -->
-          <button class="cat-card__button" type="button" disabled>
+          <RouterLink
+            class="cat-card__button"
+            :to="{ name: 'class-calendar', query: { host: cat.id } }"
+          >
             <svg
               class="icon"
               viewBox="0 0 24 24"
@@ -155,7 +158,7 @@ const cats = [
             </svg>
 
             Reserve class with {{ cat.name }}
-          </button>
+          </RouterLink>
         </footer>
       </article>
     </div>
@@ -164,9 +167,9 @@ const cats = [
 
 <style scoped>
 .spotlight {
-  margin-top: 4rem;
-  padding: 3rem 0;
-  background-color: #fcfbf8;
+  margin-top: 2rem;
+  padding: 0;
+  background-color: var(--color-background);
 }
 
 .spotlight__eyebrow {
@@ -175,7 +178,7 @@ const cats = [
   gap: 0.6rem;
   margin: 0 0 0.5rem;
   color: #a8a29e;
-  font-size: 0.85rem;
+  font-size: var(--eyebrow-size);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -188,40 +191,40 @@ const cats = [
 }
 
 .spotlight__eyebrow .icon {
-  color: #292524;
+  color: var(--color-text);
 }
 
 .spotlight__title {
   margin: 0;
-  color: #1c1917;
-  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--color-heading);
+  font-family: var(--font-heading);
   font-size: var(--section-title-size);
   line-height: 1.2;
 }
 
 .spotlight__description {
-  margin: 1rem 0 0;
-  color: #57534e;
+  margin: 0.5rem 0 0;
+  color: var(--color-text-secondary);
   font-size: var(--section-text-size);
 }
 
 .spotlight__cards {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin-top: 3.5rem;
-  border: 1px solid #e5e3e1;
-  background-color: #ffffff;
+  margin-top: 1.25rem;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-background);
 }
 
 .cat-card {
   display: flex;
   flex-direction: column;
   min-width: 0;
-  padding: 2.75rem;
+  padding: 1.5rem;
 }
 
 .cat-card + .cat-card {
-  border-left: 1px solid #e5e3e1;
+  border-left: 1px solid var(--color-border);
 }
 
 .cat-card__header {
@@ -230,7 +233,7 @@ const cats = [
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  padding-bottom: 1rem;
+  padding-bottom: 0.75rem;
   border-bottom: 1px solid #f0eeec;
 }
 
@@ -239,7 +242,7 @@ const cats = [
   align-items: center;
   gap: 0.4rem;
   margin: 0;
-  color: #1c1917;
+  color: var(--color-heading);
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -248,7 +251,7 @@ const cats = [
 
 .cat-card__role {
   color: #a8a29e;
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: var(--font-heading);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -257,16 +260,14 @@ const cats = [
 
 .cat-card__body {
   display: grid;
-  grid-template-columns: 2fr 3fr;
+  grid-template-columns: 1fr 2fr;
   align-items: start;
-  gap: 1.75rem;
-  padding: 1.75rem 0 2.25rem;
+  gap: 1.25rem;
+  padding: 1rem 0;
 }
 
 .cat-card__image-frame {
-  padding: 0.3rem;
-  border: 1px solid #e5e3e1;
-  background-color: #fafaf9;
+  border: 1px solid var(--color-border);
 }
 
 .cat-card__image {
@@ -282,14 +283,14 @@ const cats = [
 
 .cat-card__name {
   margin: 0;
-  color: #1c1917;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 1.75rem;
+  color: var(--color-heading);
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
   line-height: 1.15;
 }
 
 .cat-card__subtitle {
-  margin: 0.35rem 0 1rem;
+  margin: 0.25rem 0 0.5rem;
   color: #78716c;
   font-size: 0.8rem;
   font-style: italic;
@@ -298,24 +299,24 @@ const cats = [
 
 .cat-card__description {
   margin: 0;
-  color: #57534e;
-  font-size: 0.95rem;
-  line-height: 1.7;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.55;
 }
 
 .cat-card__traits {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
-  margin: 1.25rem 0 0;
+  margin: 0.75rem 0 0;
   padding: 0;
   list-style: none;
 }
 
 .cat-card__traits li {
   padding: 0.15rem 0.55rem;
-  border: 1px solid #e5e3e1;
-  color: #292524;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
   background-color: #f5f5f4;
   font-size: 0.65rem;
   letter-spacing: 0.04em;
@@ -324,7 +325,12 @@ const cats = [
 
 .cat-card__footer {
   margin-top: auto;
-  padding-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: 0.75rem;
   border-top: 1px solid #f0eeec;
 }
 
@@ -332,7 +338,7 @@ const cats = [
   display: flex;
   align-items: flex-start;
   gap: 0.4rem;
-  margin: 0 0 0.875rem;
+  margin: 0;
   color: #78716c;
   font-size: 0.8rem;
 }
@@ -342,8 +348,8 @@ const cats = [
 }
 
 .cat-card__tea strong {
-  color: #1c1917;
-  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--color-heading);
+  font-family: var(--font-heading);
   font-size: 0.9rem;
 }
 
@@ -353,21 +359,24 @@ const cats = [
   justify-content: center;
   gap: 0.5rem;
   max-width: 100%;
-  min-height: 2.75rem;
-  padding: 0.65rem 1.25rem;
-  border: 1px solid #292524;
+  min-height: 2.25rem;
+  padding: 0.4rem 1rem;
+  border: 1px solid #1f7a5f;
   border-radius: 0;
   color: #ffffff;
-  background-color: #292524;
+  background-color: #1f7a5f;
   font-family: inherit;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  line-height: 1.4;
+  letter-spacing: 0.05em;
+  text-decoration: none;
   text-transform: uppercase;
 }
 
-.cat-card__button:disabled {
-  cursor: not-allowed;
+.cat-card__button .icon {
+  width: 1rem;
+  height: 1rem;
 }
 
 @media (max-width: 1100px) {
@@ -376,15 +385,14 @@ const cats = [
   }
 
   .cat-card + .cat-card {
-    border-top: 1px solid #e5e3e1;
+    border-top: 1px solid var(--color-border);
     border-left: 0;
   }
 }
 
 @media (max-width: 600px) {
   .spotlight {
-    margin-top: 2rem;
-    padding: 2rem 0;
+    margin-top: 1.5rem;
   }
 
   .cat-card {
@@ -393,6 +401,10 @@ const cats = [
 
   .cat-card__body {
     grid-template-columns: 1fr;
+  }
+
+  .cat-card__image-frame {
+    max-width: 12rem;
   }
 
   .cat-card__button {

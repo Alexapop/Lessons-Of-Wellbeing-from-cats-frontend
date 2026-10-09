@@ -1,5 +1,5 @@
 <script setup>
-import sanctuaryImage from '../../docs/home-page/mia_thor_hero.jpg'
+import sanctuaryImage from '../../docs/home-page/mia_thor_hero.png'
 </script>
 
 <template>

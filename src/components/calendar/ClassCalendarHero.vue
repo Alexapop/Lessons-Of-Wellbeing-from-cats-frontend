@@ -20,7 +20,8 @@
     <h1 id="calendar-title" class="calendar-hero__title">Class &amp; Lounge Visit Calendar</h1>
 
     <p class="calendar-hero__description">
-      Reserve your spot for Yoga, Ayurveda, or a Kombucha &amp; Tea Lounge Session.
+      Reserve your spot for Yoga, Ayurveda, or a Kombucha &amp; Tea Lounge Tasting, accompanied by
+      our feline hosts.
     </p>
     <p class="calendar-hero__note">
       <strong>Note:</strong> You must be registered and logged in to make a reservation.

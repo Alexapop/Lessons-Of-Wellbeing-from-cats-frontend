@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import ClassCard from './ClassCard.vue'
 import { calendarClasses } from '../../data/ClassInformation.js'
 
@@ -17,8 +18,14 @@ const hosts = [
   { value: 'both', label: 'Mia & Thor' },
 ]
 
-const selectedCategory = ref('all')
-const selectedHost = ref('all')
+const route = useRoute()
+
+function initialFilter(options, value) {
+  return options.some((option) => option.value === value) ? value : 'all'
+}
+
+const selectedCategory = ref(initialFilter(categories, route.query.category))
+const selectedHost = ref(initialFilter(hosts, route.query.host))
 
 const filteredClasses = computed(() => {
   return calendarClasses.filter((classItem) => {

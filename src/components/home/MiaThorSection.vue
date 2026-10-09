@@ -1,4 +1,5 @@
 <script setup>
+import { RouterLink } from 'vue-router'
 import miaImage from '../../docs/home-page/i-am-mia.png'
 import thorImage from '../../docs/home-page/i-am-thor.png'
 
@@ -138,8 +139,10 @@ const cats = [
             </span>
           </p>
 
-          <!-- LWC-16: Connect to the calendar filtered by host. -->
-          <button class="cat-card__button" type="button" disabled>
+          <RouterLink
+            class="cat-card__button"
+            :to="{ name: 'class-calendar', query: { host: cat.id } }"
+          >
             <svg
               class="icon"
               viewBox="0 0 24 24"
@@ -155,7 +158,7 @@ const cats = [
             </svg>
 
             Reserve class with {{ cat.name }}
-          </button>
+          </RouterLink>
         </footer>
       </article>
     </div>
@@ -367,16 +370,13 @@ const cats = [
   font-weight: 700;
   line-height: 1.4;
   letter-spacing: 0.05em;
+  text-decoration: none;
   text-transform: uppercase;
 }
 
 .cat-card__button .icon {
   width: 1rem;
   height: 1rem;
-}
-
-.cat-card__button:disabled {
-  cursor: not-allowed;
 }
 
 @media (max-width: 1100px) {

@@ -1,5 +1,6 @@
 <script setup>
 import sanctuaryImage from '../../docs/home-page/mia_thor_hero.png'
+import { RouterLink } from 'vue-router'
 </script>
 
 <template>
@@ -35,9 +36,8 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.png'
         routines, and organic Kombucha &amp; Tea lounge visits.
       </p>
 
-      <!-- LWC-16: Connect these actions to Calendar and Lessons. -->
       <div class="hero__actions">
-        <button class="hero__button hero__button--primary" type="button" disabled>
+        <RouterLink class="hero__button hero__button--primary" to="/class-calendar">
           <svg
             class="hero__icon"
             viewBox="0 0 24 24"
@@ -51,12 +51,11 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.png'
             <rect x="4" y="5" width="16" height="16" rx="2" />
             <path d="M16 3v4M8 3v4M4 11h16" />
           </svg>
-
           Reserve class or visit
           <span aria-hidden="true">›</span>
-        </button>
+        </RouterLink>
 
-        <button class="hero__button hero__button--secondary" type="button" disabled>
+        <RouterLink class="hero__button hero__button--secondary" to="/wellbeing-lessons">
           <svg
             class="hero__icon"
             viewBox="0 0 24 24"
@@ -74,7 +73,7 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.png'
           </svg>
 
           Read wellbeing lessons
-        </button>
+        </RouterLink>
       </div>
 
       <dl class="hero__highlights">
@@ -224,6 +223,7 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.png'
   font-weight: 700;
   line-height: 1.4;
   letter-spacing: 0.05em;
+  text-decoration: none;
   text-transform: uppercase;
 }
 
@@ -241,10 +241,6 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.png'
 .hero__button .hero__icon {
   width: 1rem;
   height: 1rem;
-}
-
-.hero__button:disabled {
-  cursor: not-allowed;
 }
 
 .hero__highlights {

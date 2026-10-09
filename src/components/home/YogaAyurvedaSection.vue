@@ -1,4 +1,6 @@
 <script setup>
+import { RouterLink } from 'vue-router'
+
 const pillars = [
   {
     id: 'postures',
@@ -53,8 +55,10 @@ const pillars = [
         Join our guided sessions alongside Mia and Thor, our resident feline masters.
       </p>
 
-      <!-- LWC-16: Connect to the calendar filtered by Yoga & Ayurveda. -->
-      <button class="yoga__button" type="button" disabled>
+      <RouterLink
+        class="yoga__button"
+        :to="{ name: 'class-calendar', query: { category: 'yoga' } }"
+      >
         <svg
           class="yoga__icon"
           viewBox="0 0 24 24"
@@ -69,7 +73,7 @@ const pillars = [
           <path d="M16 3v4M8 3v4M4 11h16" />
         </svg>
 
-        <span>Reserve Yoga &amp; Ayurveda Class</span>
+        <span>Reserve Class</span>
 
         <svg
           class="yoga__icon"
@@ -83,7 +87,7 @@ const pillars = [
         >
           <path d="M5 12h14m-6-6 6 6-6 6" />
         </svg>
-      </button>
+      </RouterLink>
     </div>
 
     <div class="yoga__pillars">
@@ -195,16 +199,13 @@ const pillars = [
   line-height: 1.4;
   letter-spacing: 0.05em;
   text-align: center;
+  text-decoration: none;
   text-transform: uppercase;
 }
 
 .yoga__button .yoga__icon {
   width: 1rem;
   height: 1rem;
-}
-
-.yoga__button:disabled {
-  cursor: not-allowed;
 }
 
 .yoga__pillars {

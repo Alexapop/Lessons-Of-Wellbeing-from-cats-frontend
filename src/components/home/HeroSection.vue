@@ -35,14 +35,6 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.png'
         routines, and organic Kombucha &amp; Tea lounge visits.
       </p>
 
-      <div class="hero__wisdom">
-        <p class="hero__quote-intro">As Mia and Thor always say:</p>
-
-        <blockquote class="hero__quote">
-          “In a world full of hurry, be the cat that stops to sit in the sun”
-        </blockquote>
-      </div>
-
       <!-- LWC-16: Connect these actions to Calendar and Lessons. -->
       <div class="hero__actions">
         <button class="hero__button hero__button--primary" type="button" disabled>
@@ -117,6 +109,14 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.png'
           <span>Guardians of peace &amp; play</span>
         </figcaption>
       </figure>
+
+      <div class="hero__wisdom">
+        <p class="hero__quote-intro">As Mia and Thor always say:</p>
+
+        <blockquote class="hero__quote">
+          “In a world full of hurry, be the cat that stops to sit in the sun”
+        </blockquote>
+      </div>
     </div>
   </section>
 </template>
@@ -138,7 +138,7 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.png'
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  margin: 0 0 1.75rem;
+  margin: 0 0 1rem;
   color: #78716c;
   font-size: var(--eyebrow-size);
   font-weight: 700;
@@ -170,9 +170,9 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.png'
 }
 
 .hero__description {
-  margin: 2rem 0 0;
+  margin: 1.25rem 0 0;
   color: var(--color-text-secondary);
-  font-size: var(--section-text-size);
+  font-size: 0.95rem;
   line-height: 1.65;
 }
 
@@ -183,7 +183,7 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.png'
 
 .hero__wisdom {
   max-width: 100%;
-  margin-top: 1.5rem;
+  margin-top: 1.25rem;
   padding-left: 1rem;
   border-left: 2px solid #b8d8ca;
 }
@@ -204,23 +204,23 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.png'
 }
 
 .hero__actions {
-  display: flex;
-  flex-wrap: wrap;
+  display: inline-grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.875rem;
-  margin-top: 2.25rem;
+  margin-top: 1.5rem;
 }
 
 .hero__button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.65rem;
-  min-height: 3.25rem;
-  padding: 0.875rem 1.5rem;
+  gap: 0.5rem;
+  min-height: 2.25rem;
+  padding: 0.4rem 1rem;
   border: 1px solid #292524;
   border-radius: 0;
   font-family: inherit;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 700;
   line-height: 1.4;
   letter-spacing: 0.05em;
@@ -228,13 +228,19 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.png'
 }
 
 .hero__button--primary {
+  border-color: #1f7a5f;
   color: #ffffff;
-  background-color: var(--color-text);
+  background-color: #1f7a5f;
 }
 
 .hero__button--secondary {
   color: var(--color-text);
   background-color: var(--color-background);
+}
+
+.hero__button .hero__icon {
+  width: 1rem;
+  height: 1rem;
 }
 
 .hero__button:disabled {
@@ -244,13 +250,13 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.png'
 .hero__highlights {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  margin: 2.25rem 0 0;
+  margin: 1.5rem 0 0;
   border: 1px solid var(--color-border);
   background-color: #fafaf9;
 }
 
 .hero__highlight {
-  padding: 1rem;
+  padding: 0.65rem 1rem;
 }
 
 .hero__highlight + .hero__highlight {
@@ -275,11 +281,12 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.png'
 
 .hero__visual {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: flex-start;
   min-width: 0;
-  padding: 1.25rem;
+  padding: var(--hero-padding) 1.25rem 1.25rem;
   border-left: 1px solid var(--color-border);
-  background-color: #f5f5f4;
+  background-color: var(--color-background);
 }
 
 .hero__figure {
@@ -293,7 +300,7 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.png'
 .hero__image {
   display: block;
   width: 100%;
-  aspect-ratio: 1.06;
+  aspect-ratio: 16 / 9;
   object-fit: cover;
 }
 
@@ -301,8 +308,8 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.png'
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 0.875rem;
-  padding: 0.875rem;
+  margin-top: 0.65rem;
+  padding: 0.5rem;
   border: 1px solid var(--color-border);
   background-color: #fafaf9;
   text-align: center;
@@ -337,8 +344,9 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.png'
     padding: 1.25rem;
   }
 
-  .hero__button {
-    width: 100%;
+  .hero__actions {
+    display: grid;
+    grid-template-columns: 1fr;
   }
 
   .hero__highlights {

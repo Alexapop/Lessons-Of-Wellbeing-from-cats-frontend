@@ -63,7 +63,7 @@ import { RouterLink } from 'vue-router'
 
 .site-logo__name {
   font-family: var(--font-heading);
-  font-size: clamp(0.95rem, 1.3vw, 1.25rem);
+  font-size: clamp(0.9rem, 1.1vw, 1.05rem);
   font-weight: 700;
   line-height: 1.2;
   text-transform: uppercase;

@@ -27,6 +27,24 @@ import Logo from './components/layout/Logo.vue'
 
           Home &amp; Sanctuary
         </RouterLink>
+
+        <RouterLink class="site-nav__link" to="/class-calendar">
+          <svg
+            class="site-nav__icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <rect x="3" y="5" width="18" height="16" rx="2" />
+            <path d="M16 3v4M8 3v4M3 11h18" />
+          </svg>
+
+          Class Calendar
+        </RouterLink>
       </nav>
     </div>
   </header>

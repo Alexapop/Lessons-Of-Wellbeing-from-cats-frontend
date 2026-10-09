@@ -107,13 +107,13 @@ const currentYear = new Date().getFullYear()
             >
               <path
                 d="M22 16.9v3a2 2 0 0 1-2.2 2
-                   19.8 19.8 0 0 1-8.6-3.1
-                   19.5 19.5 0 0 1-6-6
-                   19.8 19.8 0 0 1-3.1-8.7
-                   A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7
-                   c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9
-                   a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5
-                   c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.8 2.1Z"
+                 19.8 19.8 0 0 1-8.6-3.1
+                 19.5 19.5 0 0 1-6-6
+                 19.8 19.8 0 0 1-3.1-8.7
+                 A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7
+                 c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9
+                 a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5
+                 c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.8 2.1Z"
               />
             </svg>
 
@@ -141,26 +141,29 @@ const currentYear = new Date().getFullYear()
             <p>Kombucha &amp; Tea tastings require reservation in advance.</p>
           </li>
         </ul>
-
-        <div class="site-footer__payment">
-          <svg
-            class="site-footer__icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.7"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <rect x="2" y="6" width="20" height="12" rx="2" />
-            <circle cx="12" cy="12" r="2" />
-            <path d="M6 12h.01M18 12h.01" />
-          </svg>
-
-          <p><strong>Payment Methods:</strong> Only Cash or Bizum accepted.</p>
-        </div>
       </section>
+
+      <aside class="site-footer__payment" aria-label="Payment methods">
+        <svg
+          class="site-footer__icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <rect x="2" y="6" width="20" height="12" rx="2" />
+          <circle cx="12" cy="12" r="2" />
+          <path d="M6 12h.01M18 12h.01" />
+        </svg>
+
+        <p>
+          <strong class="site-footer__payment-title">Payment Methods:</strong>
+          Only Cash or Bizum accepted.
+        </p>
+      </aside>
     </div>
   </footer>
 </template>
@@ -174,7 +177,7 @@ const currentYear = new Date().getFullYear()
 
 .site-footer__container {
   display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.1fr) minmax(0, 1.1fr);
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr) minmax(0, 1.1fr) auto;
   align-items: start;
   gap: 1.25rem;
   width: calc(100% - 2 * clamp(1rem, 4vw, 4rem));
@@ -190,10 +193,10 @@ const currentYear = new Date().getFullYear()
 .site-footer__brand {
   display: inline-flex;
   align-items: center;
-  gap: 0.875rem;
+  gap: 0.6rem;
   color: var(--color-heading);
   font-family: var(--font-heading);
-  font-size: 1.125rem;
+  font-size: 0.95rem;
   font-weight: 700;
   line-height: 1.3;
   text-decoration: none;
@@ -204,8 +207,8 @@ const currentYear = new Date().getFullYear()
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.1rem;
+  height: 2.1rem;
   flex-shrink: 0;
   border-radius: 50%;
   color: #ffffff;
@@ -213,29 +216,38 @@ const currentYear = new Date().getFullYear()
 }
 
 .site-footer__logo svg {
-  width: 1.4rem;
-  height: 1.4rem;
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.site-footer__about {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
 }
 
 .site-footer__description {
-  max-width: 85ch;
-  margin: 0.5rem 0 0;
+  width: 25rem;
+  max-width: 100%;
+  margin: 0.4rem 0 0;
   color: var(--color-text-secondary);
-  font-size: 0.8125rem;
+  font-size: 0.7rem;
   line-height: 1.4;
 }
 
 .site-footer__copyright {
+  width: 0;
+  min-width: 100%;
   margin: 0.5rem 0 0;
+  white-space: nowrap;
   color: #78716c;
   font-family: 'Courier New', monospace;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   line-height: 1.3;
 }
 
 .site-footer__copyright > span {
-  display: block;
-  margin-top: 0;
+  display: inline;
 }
 
 .site-footer__heart {
@@ -243,10 +255,10 @@ const currentYear = new Date().getFullYear()
 }
 
 .site-footer__heading {
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.3rem;
   color: var(--color-heading);
   font-family: var(--font-heading);
-  font-size: 1rem;
+  font-size: 0.72rem;
   font-weight: 700;
   line-height: 1.4;
   text-transform: uppercase;
@@ -254,7 +266,7 @@ const currentYear = new Date().getFullYear()
 
 .site-footer__list {
   display: grid;
-  gap: 0.4rem;
+  gap: 0.25rem;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -264,16 +276,16 @@ const currentYear = new Date().getFullYear()
 .site-footer__payment {
   display: flex;
   align-items: flex-start;
-  gap: 0.75rem;
+  gap: 0.45rem;
   color: var(--color-text-secondary);
-  font-size: 0.8125rem;
-  line-height: 1.4;
+  font-size: 0.68rem;
+  line-height: 1.35;
 }
 
 .site-footer__icon {
-  width: 1.2rem;
-  height: 1.2rem;
-  margin-top: 0.15rem;
+  width: 0.9rem;
+  height: 0.9rem;
+  margin-top: 0.05rem;
   flex-shrink: 0;
   color: #00664f;
 }
@@ -312,17 +324,28 @@ const currentYear = new Date().getFullYear()
 }
 
 .site-footer__payment {
-  margin-top: 0.5rem;
-  padding: 0.3rem 0.5rem;
+  justify-self: end;
+  padding: 0.45rem 0.7rem;
   border: 1px solid #b8dfcf;
-  border-radius: 0.7rem;
+  border-left: 3px solid #00664f;
+  border-radius: 0.5rem;
   color: var(--color-heading);
   background-color: #effaf4;
 }
 
+.site-footer__payment-title {
+  display: block;
+  margin-bottom: 0.15rem;
+  color: #00664f;
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
 @media (max-width: 1400px) {
   .site-footer__container {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr)) auto;
     gap: 1rem;
     padding: 1rem 0;
   }
@@ -343,7 +366,20 @@ const currentYear = new Date().getFullYear()
   }
 
   .site-footer__brand {
-    font-size: 1.125rem;
+    font-size: 0.95rem;
+  }
+
+  .site-footer__copyright {
+    white-space: normal;
+  }
+
+  .site-footer__about,
+  .site-footer__description {
+    width: auto;
+  }
+
+  .site-footer__payment {
+    justify-self: start;
   }
 }
 </style>

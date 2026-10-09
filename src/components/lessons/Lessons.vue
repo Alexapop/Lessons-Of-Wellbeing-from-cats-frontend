@@ -1,4 +1,5 @@
 <script setup>
+import LessonCard from './LessonCard.vue'
 import lesson1Image from '../../docs/home-page/lesson1-thor-art-of-the-slow-start.png'
 import lesson2Image from '../../docs/home-page/lesson2-mia-morning-ritual.png'
 import lesson3Image from '../../docs/home-page/lesson3-mia-freshen-up-for-the-day.png'
@@ -25,6 +26,7 @@ const lessons = [
     text: 'When you get out of bed, stretch! You’ve been lying down for hours, and your body needs to wake up.',
     image: lesson2Image,
     imageAlt: 'Mia illustrating a morning stretching ritual',
+    imagePosition: '50% 66%',
   },
   {
     id: 3,
@@ -33,6 +35,7 @@ const lessons = [
     text: "Prepare yourself for what's ahead. It is essential to refresh your body and mind so you feel ready to face anything with confidence.",
     image: lesson3Image,
     imageAlt: 'Mia illustrating getting ready for the day',
+    imagePosition: '50% 48%',
   },
   {
     id: 4,
@@ -41,6 +44,7 @@ const lessons = [
     text: 'Eat when you are hungry and listen to what your body truly needs. Avoid overeating; nourish yourself to keep your energy high.',
     image: lesson4Image,
     imageAlt: 'Mia illustrating intuitive eating',
+    imagePosition: '50% 70%',
   },
   {
     id: 5,
@@ -67,6 +71,7 @@ const lessons = [
     text: 'Don’t lie to yourself about how you feel or who you are just to be accepted by others. Be real, just like cats.',
     image: lesson7Image,
     imageAlt: 'Mia illustrating authenticity',
+    imagePosition: '50% 60%',
   },
   {
     id: 8,
@@ -75,6 +80,7 @@ const lessons = [
     text: 'Stay curious like a cat to keep your mind sharp and your life full of adventure.',
     image: lesson8Image,
     imageAlt: 'Thor illustrating curiosity',
+    imagePosition: '50% 100%',
   },
   {
     id: 9,
@@ -110,9 +116,7 @@ const lessons = [
         Feline Wisdom Principles
       </p>
 
-      <h2 id="lessons-title" class="lessons__title">
-        {{ lessons.length }} Lessons of Wellbeing from Cats
-      </h2>
+      <h2 id="lessons-title" class="lessons__title">Lessons of Wellbeing from Cats</h2>
 
       <div class="lessons__introduction">
         <p>
@@ -135,60 +139,16 @@ const lessons = [
     </header>
 
     <div class="lessons__grid">
-      <article
-        v-for="lesson in lessons"
-        :key="lesson.id"
-        class="lesson-card"
-        :aria-labelledby="`lesson-title-${lesson.id}`"
-      >
-        <header class="lesson-card__header">
-          <div>
-            <p class="lesson-card__host">Host: {{ lesson.host }}</p>
-
-            <p class="lesson-card__number">Lesson {{ lesson.id }}</p>
-          </div>
-        </header>
-
-        <h3 :id="`lesson-title-${lesson.id}`" class="lesson-card__title">
-          {{ lesson.title }}
-        </h3>
-
-        <div class="lesson-card__image-frame">
-          <img
-            class="lesson-card__image"
-            :src="lesson.image"
-            :alt="lesson.imageAlt"
-            loading="lazy"
-          />
-        </div>
-
-        <div class="lesson-card__content">
-          <p>
-            {{ lesson.text }}
-            <template v-if="lesson.emphasis">
-              <em>{{ lesson.emphasis }}</em>
-              {{ lesson.ending }}
-            </template>
-          </p>
-        </div>
-
-        <footer class="lesson-card__footer">
-          <!-- LWC-16: Connect to the calendar with relevant filters. -->
-          <button class="lesson-card__practice" type="button" disabled>
-            Practice in Class
-            <span aria-hidden="true">&rarr;</span>
-          </button>
-        </footer>
-      </article>
+      <LessonCard v-for="lesson in lessons" :key="lesson.id" :lesson="lesson" />
     </div>
   </section>
 </template>
 
 <style scoped>
 .lessons {
-  margin-top: 2.5rem;
-  padding: 1.5rem 0;
-  background-color: #fcfbf8;
+  margin-top: 2rem;
+  padding: 0;
+  background-color: var(--color-background);
 }
 
 .lessons__eyebrow {
@@ -222,15 +182,15 @@ const lessons = [
 }
 
 .lessons__introduction {
-  margin-top: 1rem;
+  margin-top: 0.5rem;
   color: var(--color-text-secondary);
   font-size: var(--section-text-size);
   font-weight: 400;
-  line-height: 1.65;
+  line-height: 1.55;
 }
 
 .lessons__introduction p {
-  margin: 0 0 0.75rem;
+  margin: 0 0 0.4rem;
 }
 
 .lessons__introduction p:last-child {
@@ -240,109 +200,10 @@ const lessons = [
 .lessons__grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.5rem 0;
-  margin-top: 1.5rem;
-  background-color: #fcfbf8;
-}
-
-.lesson-card {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  padding: 1rem;
-  border: 1px solid var(--color-border);
+  align-items: start;
+  gap: 1rem;
+  margin-top: 1.25rem;
   background-color: var(--color-background);
-}
-
-.lesson-card__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-bottom: 0.65rem;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.lesson-card__host {
-  margin: 0;
-  color: var(--color-text);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-.lesson-card__number {
-  margin: 0.25rem 0 0;
-  color: #78716c;
-  font-size: 0.65rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.lesson-card__title {
-  margin: 0.75rem 0;
-  min-height: 2.5em;
-  color: var(--color-heading);
-  font-family: var(--font-heading);
-  font-size: 1.2rem;
-  line-height: 1.25;
-}
-
-.lesson-card__image-frame {
-  height: 240px;
-  overflow: hidden;
-  border: 1px solid var(--color-border);
-  background-color: #fafaf9;
-}
-
-.lesson-card__image {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.lesson-card__content {
-  padding: 0.75rem 0;
-  color: var(--color-text-secondary);
-  font-size: 0.95rem;
-  line-height: 1.7;
-}
-
-.lesson-card__content p {
-  margin: 0;
-}
-
-.lesson-card__footer {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-top: auto;
-  padding-top: 0.5rem;
-  border-top: 1px solid #f0eeec;
-}
-
-.lesson-card__practice {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 2.75rem;
-  padding: 0.5rem 0;
-  border: 0;
-  color: var(--color-text);
-  background-color: transparent;
-  font-family: inherit;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.lesson-card__practice:disabled {
-  cursor: not-allowed;
 }
 
 @media (max-width: 1000px) {
@@ -359,8 +220,7 @@ const lessons = [
 
 @media (max-width: 480px) {
   .lessons {
-    margin-top: 2rem;
-    padding: 1.5rem 0;
+    margin-top: 1.5rem;
   }
 }
 </style>

@@ -55,8 +55,8 @@ import Logo from './components/layout/Logo.vue'
 
 <style scoped>
 .site-header {
-  border-bottom: 1px solid #e5e3e1;
-  background-color: #ffffff;
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-background);
 }
 
 .site-header__container {
@@ -83,7 +83,7 @@ import Logo from './components/layout/Logo.vue'
   gap: 0.5rem;
   padding: 0.5rem 0;
   border-bottom: 2px solid transparent;
-  color: #292524;
+  color: var(--color-text);
   font-size: 0.875rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -92,7 +92,7 @@ import Logo from './components/layout/Logo.vue'
 }
 
 .site-nav__link.router-link-exact-active {
-  border-bottom-color: #292524;
+  border-bottom-color: var(--color-text);
 }
 
 .site-nav__icon {

@@ -197,14 +197,14 @@ const lessons = [
   gap: 0.6rem;
   margin: 0 0 0.5rem;
   color: #a8a29e;
-  font-size: 0.85rem;
+  font-size: var(--eyebrow-size);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
 .lessons__eyebrow .lessons__icon {
-  color: #292524;
+  color: var(--color-text);
 }
 
 .lessons__icon {
@@ -215,15 +215,15 @@ const lessons = [
 
 .lessons__title {
   margin: 0;
-  color: #1c1917;
-  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--color-heading);
+  font-family: var(--font-heading);
   font-size: var(--section-title-size);
   line-height: 1.2;
 }
 
 .lessons__introduction {
   margin-top: 1rem;
-  color: #57534e;
+  color: var(--color-text-secondary);
   font-size: var(--section-text-size);
   font-weight: 400;
   line-height: 1.65;
@@ -250,8 +250,8 @@ const lessons = [
   flex-direction: column;
   min-width: 0;
   padding: 1rem;
-  border: 1px solid #e5e3e1;
-  background-color: #ffffff;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-background);
 }
 
 .lesson-card__header {
@@ -260,12 +260,12 @@ const lessons = [
   justify-content: space-between;
   gap: 1rem;
   padding-bottom: 0.65rem;
-  border-bottom: 1px solid #e5e3e1;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .lesson-card__host {
   margin: 0;
-  color: #292524;
+  color: var(--color-text);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -283,8 +283,8 @@ const lessons = [
 .lesson-card__title {
   margin: 0.75rem 0;
   min-height: 2.5em;
-  color: #1c1917;
-  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--color-heading);
+  font-family: var(--font-heading);
   font-size: 1.2rem;
   line-height: 1.25;
 }
@@ -292,7 +292,7 @@ const lessons = [
 .lesson-card__image-frame {
   height: 240px;
   overflow: hidden;
-  border: 1px solid #e5e3e1;
+  border: 1px solid var(--color-border);
   background-color: #fafaf9;
 }
 
@@ -305,7 +305,7 @@ const lessons = [
 
 .lesson-card__content {
   padding: 0.75rem 0;
-  color: #57534e;
+  color: var(--color-text-secondary);
   font-size: 0.95rem;
   line-height: 1.7;
 }
@@ -332,7 +332,7 @@ const lessons = [
   min-height: 2.75rem;
   padding: 0.5rem 0;
   border: 0;
-  color: #292524;
+  color: var(--color-text);
   background-color: transparent;
   font-family: inherit;
   font-size: 0.75rem;

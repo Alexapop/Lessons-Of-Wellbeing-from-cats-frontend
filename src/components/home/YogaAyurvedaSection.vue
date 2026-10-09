@@ -122,8 +122,8 @@ const pillars = [
   gap: 3rem;
   margin-top: 2.5rem;
   padding: 3.5rem;
-  border: 1px solid #e5e3e1;
-  background-color: #ffffff;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-background);
 }
 
 .yoga__content {
@@ -136,7 +136,7 @@ const pillars = [
   gap: 0.6rem;
   margin: 0 0 1.25rem;
   color: #78716c;
-  font-size: 0.85rem;
+  font-size: var(--eyebrow-size);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -149,13 +149,13 @@ const pillars = [
 }
 
 .yoga__eyebrow .yoga__icon {
-  color: #292524;
+  color: var(--color-text);
 }
 
 .yoga__title {
   margin: 0;
-  color: #1c1917;
-  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--color-heading);
+  font-family: var(--font-heading);
   font-size: var(--section-title-size);
   font-weight: 700;
   line-height: 1.2;
@@ -164,14 +164,14 @@ const pillars = [
 .yoga__title span {
   display: block;
   margin-top: 0.35rem;
-  color: #57534e;
+  color: var(--color-text-secondary);
   font-style: italic;
   font-weight: 400;
 }
 
 .yoga__description {
   margin: 1.75rem 0 0;
-  color: #57534e;
+  color: var(--color-text-secondary);
   font-size: var(--section-text-size);
   line-height: 1.65;
 }
@@ -188,7 +188,7 @@ const pillars = [
   border: 1px solid #292524;
   border-radius: 0;
   color: #ffffff;
-  background-color: #292524;
+  background-color: var(--color-text);
   font-family: inherit;
   font-size: 0.8rem;
   font-weight: 700;
@@ -205,16 +205,16 @@ const pillars = [
 .yoga__pillars {
   min-width: 0;
   padding: 1.75rem;
-  border: 1px solid #e5e3e1;
+  border: 1px solid var(--color-border);
   background-color: #fafaf9;
 }
 
 .yoga__pillars-title {
   margin: 0;
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid #e5e3e1;
-  color: #1c1917;
-  font-family: Georgia, 'Times New Roman', serif;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-heading);
+  font-family: var(--font-heading);
   font-size: var(--section-text-size);
   font-weight: 700;
   line-height: 1.4;
@@ -237,12 +237,12 @@ const pillars = [
 
 .yoga__pillar .yoga__icon {
   margin-top: 0.1rem;
-  color: #292524;
+  color: var(--color-text);
 }
 
 .yoga__pillar p {
   margin: 0;
-  color: #57534e;
+  color: var(--color-text-secondary);
   font-size: 0.875rem;
   line-height: 1.5;
 }

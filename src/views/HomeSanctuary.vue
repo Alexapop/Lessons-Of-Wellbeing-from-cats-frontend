@@ -7,7 +7,7 @@ import KombuchaTeaLoungeSection from '@/components/home/KombuchaTeaLoungeSection
 </script>
 
 <template>
-  <main class="home-sanctuary">
+  <main class="home-sanctuary page-container">
     <HeroSection />
     <MiaThorSection />
     <LessonsPreview />
@@ -15,12 +15,3 @@ import KombuchaTeaLoungeSection from '@/components/home/KombuchaTeaLoungeSection
     <KombuchaTeaLoungeSection />
   </main>
 </template>
-
-<style scoped>
-.home-sanctuary {
-  width: calc(100% - 2 * var(--page-gutter));
-  max-width: var(--page-width);
-  margin: 0 auto;
-  padding: 2rem 0;
-}
-</style>

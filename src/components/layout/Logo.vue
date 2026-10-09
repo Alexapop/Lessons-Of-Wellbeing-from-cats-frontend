@@ -62,7 +62,7 @@ import { RouterLink } from 'vue-router'
 }
 
 .site-logo__name {
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: var(--font-heading);
   font-size: clamp(0.95rem, 1.3vw, 1.25rem);
   font-weight: 700;
   line-height: 1.2;

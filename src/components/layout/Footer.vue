@@ -168,7 +168,7 @@ const currentYear = new Date().getFullYear()
 <style scoped>
 .site-footer {
   margin-top: 0;
-  border-top: 1px solid #e5e3e1;
+  border-top: 1px solid var(--color-border);
   background-color: #fcfbf8;
 }
 
@@ -191,8 +191,8 @@ const currentYear = new Date().getFullYear()
   display: inline-flex;
   align-items: center;
   gap: 0.875rem;
-  color: #1c1917;
-  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--color-heading);
+  font-family: var(--font-heading);
   font-size: 1.125rem;
   font-weight: 700;
   line-height: 1.3;
@@ -220,7 +220,7 @@ const currentYear = new Date().getFullYear()
 .site-footer__description {
   max-width: 85ch;
   margin: 0.5rem 0 0;
-  color: #57534e;
+  color: var(--color-text-secondary);
   font-size: 0.8125rem;
   line-height: 1.4;
 }
@@ -244,8 +244,8 @@ const currentYear = new Date().getFullYear()
 
 .site-footer__heading {
   margin: 0 0 0.5rem;
-  color: #1c1917;
-  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--color-heading);
+  font-family: var(--font-heading);
   font-size: 1rem;
   font-weight: 700;
   line-height: 1.4;
@@ -265,7 +265,7 @@ const currentYear = new Date().getFullYear()
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
-  color: #57534e;
+  color: var(--color-text-secondary);
   font-size: 0.8125rem;
   line-height: 1.4;
 }
@@ -316,7 +316,7 @@ const currentYear = new Date().getFullYear()
   padding: 0.3rem 0.5rem;
   border: 1px solid #b8dfcf;
   border-radius: 0.7rem;
-  color: #1c1917;
+  color: var(--color-heading);
   background-color: #effaf4;
 }
 

@@ -125,13 +125,13 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.jpg'
 .hero {
   display: grid;
   grid-template-columns: 7fr 5fr;
-  border: 1px solid #e5e3e1;
-  background-color: #ffffff;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-background);
 }
 
 .hero__content {
   min-width: 0;
-  padding: 2rem;
+  padding: var(--hero-padding);
 }
 
 .hero__eyebrow {
@@ -140,7 +140,7 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.jpg'
   gap: 0.6rem;
   margin: 0 0 1.75rem;
   color: #78716c;
-  font-size: 0.85rem;
+  font-size: var(--eyebrow-size);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -154,9 +154,9 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.jpg'
 
 .hero__title {
   margin: 0;
-  color: #1c1917;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+  color: var(--color-heading);
+  font-family: var(--font-heading);
+  font-size: var(--hero-title-size);
   font-weight: 700;
   line-height: 1.2;
 }
@@ -164,21 +164,21 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.jpg'
 .hero__title span {
   display: block;
   margin-top: 0.25rem;
-  color: #57534e;
+  color: var(--color-text-secondary);
   font-style: italic;
   font-weight: 400;
 }
 
 .hero__description {
   margin: 2rem 0 0;
-  color: #57534e;
+  color: var(--color-text-secondary);
   font-size: var(--section-text-size);
   line-height: 1.65;
 }
 
 .hero__description strong {
-  color: #1c1917;
-  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--color-heading);
+  font-family: var(--font-heading);
 }
 
 .hero__wisdom {
@@ -190,14 +190,14 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.jpg'
 
 .hero__quote-intro {
   margin: 0 0 0.4rem;
-  color: #57534e;
+  color: var(--color-text-secondary);
   font-size: 0.8rem;
 }
 
 .hero__quote {
   margin: 0;
   color: #00664f;
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: var(--font-heading);
   font-size: 1rem;
   font-style: italic;
   line-height: 1.6;
@@ -229,12 +229,12 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.jpg'
 
 .hero__button--primary {
   color: #ffffff;
-  background-color: #292524;
+  background-color: var(--color-text);
 }
 
 .hero__button--secondary {
-  color: #292524;
-  background-color: #ffffff;
+  color: var(--color-text);
+  background-color: var(--color-background);
 }
 
 .hero__button:disabled {
@@ -245,7 +245,7 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.jpg'
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   margin: 2.25rem 0 0;
-  border: 1px solid #e5e3e1;
+  border: 1px solid var(--color-border);
   background-color: #fafaf9;
 }
 
@@ -254,7 +254,7 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.jpg'
 }
 
 .hero__highlight + .hero__highlight {
-  border-left: 1px solid #e5e3e1;
+  border-left: 1px solid var(--color-border);
 }
 
 .hero__highlight dt {
@@ -267,8 +267,8 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.jpg'
 
 .hero__highlight dd {
   margin: 0.25rem 0 0;
-  color: #1c1917;
-  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--color-heading);
+  font-family: var(--font-heading);
   font-size: 1rem;
   font-weight: 700;
 }
@@ -278,7 +278,7 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.jpg'
   align-items: center;
   min-width: 0;
   padding: 1.25rem;
-  border-left: 1px solid #e5e3e1;
+  border-left: 1px solid var(--color-border);
   background-color: #f5f5f4;
 }
 
@@ -287,7 +287,7 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.jpg'
   margin: 0;
   padding: 0;
   border: 0;
-  background-color: #ffffff;
+  background-color: var(--color-background);
 }
 
 .hero__image {
@@ -303,19 +303,19 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.jpg'
   align-items: center;
   margin-top: 0.875rem;
   padding: 0.875rem;
-  border: 1px solid #e5e3e1;
+  border: 1px solid var(--color-border);
   background-color: #fafaf9;
   text-align: center;
 }
 
 .hero__caption strong {
-  color: #1c1917;
-  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--color-heading);
+  font-family: var(--font-heading);
   font-size: 0.95rem;
 }
 
 .hero__caption span {
-  color: #57534e;
+  color: var(--color-text-secondary);
   font-size: 0.75rem;
   font-style: italic;
 }
@@ -325,19 +325,14 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.jpg'
     grid-template-columns: 1fr;
   }
 
-  .hero__content {
-    padding: 2rem;
-  }
-
   .hero__visual {
     padding: 1.25rem;
-    border-top: 1px solid #e5e3e1;
+    border-top: 1px solid var(--color-border);
     border-left: 0;
   }
 }
 
 @media (max-width: 480px) {
-  .hero__content,
   .hero__visual {
     padding: 1.25rem;
   }
@@ -351,7 +346,7 @@ import sanctuaryImage from '../../docs/home-page/mia_thor_hero.jpg'
   }
 
   .hero__highlight + .hero__highlight {
-    border-top: 1px solid #e5e3e1;
+    border-top: 1px solid var(--color-border);
     border-left: 0;
   }
 }

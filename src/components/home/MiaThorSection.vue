@@ -175,7 +175,7 @@ const cats = [
   gap: 0.6rem;
   margin: 0 0 0.5rem;
   color: #a8a29e;
-  font-size: 0.85rem;
+  font-size: var(--eyebrow-size);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -188,20 +188,20 @@ const cats = [
 }
 
 .spotlight__eyebrow .icon {
-  color: #292524;
+  color: var(--color-text);
 }
 
 .spotlight__title {
   margin: 0;
-  color: #1c1917;
-  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--color-heading);
+  font-family: var(--font-heading);
   font-size: var(--section-title-size);
   line-height: 1.2;
 }
 
 .spotlight__description {
   margin: 1rem 0 0;
-  color: #57534e;
+  color: var(--color-text-secondary);
   font-size: var(--section-text-size);
 }
 
@@ -209,8 +209,8 @@ const cats = [
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   margin-top: 3.5rem;
-  border: 1px solid #e5e3e1;
-  background-color: #ffffff;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-background);
 }
 
 .cat-card {
@@ -221,7 +221,7 @@ const cats = [
 }
 
 .cat-card + .cat-card {
-  border-left: 1px solid #e5e3e1;
+  border-left: 1px solid var(--color-border);
 }
 
 .cat-card__header {
@@ -239,7 +239,7 @@ const cats = [
   align-items: center;
   gap: 0.4rem;
   margin: 0;
-  color: #1c1917;
+  color: var(--color-heading);
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -248,7 +248,7 @@ const cats = [
 
 .cat-card__role {
   color: #a8a29e;
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: var(--font-heading);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -265,7 +265,7 @@ const cats = [
 
 .cat-card__image-frame {
   padding: 0.3rem;
-  border: 1px solid #e5e3e1;
+  border: 1px solid var(--color-border);
   background-color: #fafaf9;
 }
 
@@ -282,8 +282,8 @@ const cats = [
 
 .cat-card__name {
   margin: 0;
-  color: #1c1917;
-  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--color-heading);
+  font-family: var(--font-heading);
   font-size: 1.75rem;
   line-height: 1.15;
 }
@@ -298,7 +298,7 @@ const cats = [
 
 .cat-card__description {
   margin: 0;
-  color: #57534e;
+  color: var(--color-text-secondary);
   font-size: 0.95rem;
   line-height: 1.7;
 }
@@ -314,8 +314,8 @@ const cats = [
 
 .cat-card__traits li {
   padding: 0.15rem 0.55rem;
-  border: 1px solid #e5e3e1;
-  color: #292524;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
   background-color: #f5f5f4;
   font-size: 0.65rem;
   letter-spacing: 0.04em;
@@ -342,8 +342,8 @@ const cats = [
 }
 
 .cat-card__tea strong {
-  color: #1c1917;
-  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--color-heading);
+  font-family: var(--font-heading);
   font-size: 0.9rem;
 }
 
@@ -358,7 +358,7 @@ const cats = [
   border: 1px solid #292524;
   border-radius: 0;
   color: #ffffff;
-  background-color: #292524;
+  background-color: var(--color-text);
   font-family: inherit;
   font-size: 0.8rem;
   font-weight: 700;
@@ -376,7 +376,7 @@ const cats = [
   }
 
   .cat-card + .cat-card {
-    border-top: 1px solid #e5e3e1;
+    border-top: 1px solid var(--color-border);
     border-left: 0;
   }
 }

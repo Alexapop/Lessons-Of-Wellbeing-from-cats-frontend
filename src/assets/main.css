@@ -6,11 +6,11 @@
   --color-text: #292524;
   --color-text-secondary: #57534e;
   --color-border: #e5e3e1;
-  --hero-title-size: clamp(1.5rem, 2.5vw, 2.25rem);
+  --hero-title-size: clamp(1.3rem, 1.9vw, 1.75rem);
   --hero-padding: 2rem;
   --eyebrow-size: 0.85rem;
   --page-width: 1520px;
-  --section-title-size: clamp(1.5rem, 2.2vw, 2rem);
+  --section-title-size: clamp(1.2rem, 1.6vw, 1.5rem);
   --section-text-size: 1rem;
   --page-gutter: clamp(1rem, 10vw, 12rem);
 }

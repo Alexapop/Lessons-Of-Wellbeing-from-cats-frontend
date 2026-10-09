@@ -1,4 +1,6 @@
 <script setup>
+import { RouterLink } from 'vue-router'
+
 const etiquette = [
   {
     id: 'mia',
@@ -47,8 +49,10 @@ const etiquette = [
         <strong>Mia</strong> and <strong> Thor</strong>.
       </p>
 
-      <!-- LWC-16: Connect to the calendar filtered by Tea & Kombucha. -->
-      <button class="lounge__button" type="button" disabled>
+      <RouterLink
+        class="lounge__button"
+        :to="{ name: 'class-calendar', query: { category: 'lounge' } }"
+      >
         <svg
           class="lounge__icon"
           viewBox="0 0 24 24"
@@ -63,7 +67,7 @@ const etiquette = [
           <path d="M16 3v4M8 3v4M4 11h16" />
         </svg>
 
-        <span>Reserve Tea &amp; Kombucha Class</span>
+        <span>Reserve Kombucha & Tea Lounge Visit</span>
 
         <svg
           class="lounge__icon"
@@ -77,7 +81,7 @@ const etiquette = [
         >
           <path d="M5 12h14m-6-6 6 6-6 6" />
         </svg>
-      </button>
+      </RouterLink>
     </div>
 
     <div class="lounge__etiquette">
@@ -188,16 +192,13 @@ const etiquette = [
   line-height: 1.4;
   letter-spacing: 0.05em;
   text-align: center;
+  text-decoration: none;
   text-transform: uppercase;
 }
 
 .lounge__button .lounge__icon {
   width: 1rem;
   height: 1rem;
-}
-
-.lounge__button:disabled {
-  cursor: not-allowed;
 }
 
 .lounge__etiquette {

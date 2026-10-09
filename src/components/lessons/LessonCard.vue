@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import { RouterLink } from 'vue-router'
 
 const props = defineProps({
   lesson: {
@@ -72,11 +73,13 @@ function toggleDetails() {
       </div>
 
       <footer class="lesson-card__footer">
-        <!-- LWC-16: Connect to the calendar with relevant filters. -->
-        <button class="lesson-card__practice" type="button" disabled>
+        <RouterLink
+          class="lesson-card__practice"
+          :to="{ name: 'class-calendar', query: { host: lesson.host.toLowerCase() } }"
+        >
           Practice in Class
           <span aria-hidden="true">&rarr;</span>
-        </button>
+        </RouterLink>
       </footer>
     </div>
   </article>
@@ -216,11 +219,8 @@ function toggleDetails() {
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.04em;
+  text-decoration: none;
   text-transform: uppercase;
-}
-
-.lesson-card__practice:disabled {
-  cursor: not-allowed;
 }
 
 @media (prefers-reduced-motion: reduce) {

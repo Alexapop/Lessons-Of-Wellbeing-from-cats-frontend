@@ -28,6 +28,30 @@ import Logo from './components/layout/Logo.vue'
           Home &amp; Sanctuary
         </RouterLink>
 
+        <RouterLink class="site-nav__link" to="/wellbeing-lessons">
+          <svg
+            class="site-nav__icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="5.5" cy="10.5" r="1.8" />
+            <circle cx="9.5" cy="5.5" r="1.8" />
+            <circle cx="14.5" cy="5.5" r="1.8" />
+            <circle cx="18.5" cy="10.5" r="1.8" />
+            <path
+              d="M12 11.5c-2.8 0-5.5 3.6-5.5 6 0 1.6 1.2 2.5 2.8 2.5
+                 1.1 0 1.8-.6 2.7-.6s1.6.6 2.7.6c1.6 0 2.8-.9 2.8-2.5 0-2.4-2.7-6-5.5-6Z"
+            />
+          </svg>
+
+          Wellbeing Lessons
+        </RouterLink>
+
         <RouterLink class="site-nav__link" to="/class-calendar">
           <svg
             class="site-nav__icon"
@@ -84,7 +108,7 @@ import Logo from './components/layout/Logo.vue'
   padding: 0.5rem 0;
   border-bottom: 2px solid transparent;
   color: var(--color-text);
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-decoration: none;
@@ -96,9 +120,10 @@ import Logo from './components/layout/Logo.vue'
 }
 
 .site-nav__icon {
-  width: 1.2rem;
-  height: 1.2rem;
+  width: 1.1rem;
+  height: 1.1rem;
   flex-shrink: 0;
+  color: #00664f;
 }
 @media (max-width: 600px) {
   .site-header__container {
@@ -109,7 +134,7 @@ import Logo from './components/layout/Logo.vue'
   }
 
   .site-nav__link {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
   }
 }
 </style>

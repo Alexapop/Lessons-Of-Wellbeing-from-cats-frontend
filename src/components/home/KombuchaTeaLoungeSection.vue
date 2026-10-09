@@ -112,9 +112,9 @@ const etiquette = [
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
   align-items: center;
-  gap: 3rem;
-  margin-top: 2.5rem;
-  padding: 3.5rem;
+  gap: 2rem;
+  margin-top: 2rem;
+  padding: 2rem;
   border: 1px solid var(--color-border);
   background-color: var(--color-background);
 }
@@ -127,7 +127,7 @@ const etiquette = [
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  margin: 0 0 1.25rem;
+  margin: 0 0 0.75rem;
   color: #78716c;
   font-size: var(--eyebrow-size);
   font-weight: 700;
@@ -163,7 +163,7 @@ const etiquette = [
 }
 
 .lounge__description {
-  margin: 1.75rem 0 0;
+  margin: 1rem 0 0;
   color: var(--color-text-secondary);
   font-size: var(--section-text-size);
   line-height: 1.65;
@@ -173,22 +173,27 @@ const etiquette = [
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.65rem;
+  gap: 0.5rem;
   max-width: 100%;
-  min-height: 3.25rem;
-  margin-top: 1.75rem;
-  padding: 0.875rem 1.5rem;
-  border: 1px solid #292524;
+  min-height: 2.25rem;
+  margin-top: 1.25rem;
+  padding: 0.4rem 1rem;
+  border: 1px solid #1f7a5f;
   border-radius: 0;
   color: #ffffff;
-  background-color: var(--color-text);
+  background-color: #1f7a5f;
   font-family: inherit;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 700;
   line-height: 1.4;
   letter-spacing: 0.05em;
   text-align: center;
   text-transform: uppercase;
+}
+
+.lounge__button .lounge__icon {
+  width: 1rem;
+  height: 1rem;
 }
 
 .lounge__button:disabled {
@@ -197,7 +202,7 @@ const etiquette = [
 
 .lounge__etiquette {
   min-width: 0;
-  padding: 1.75rem;
+  padding: 1.25rem;
   border: 1px solid var(--color-border);
   background-color: #fafaf9;
 }
@@ -249,14 +254,14 @@ const etiquette = [
 @media (max-width: 1000px) {
   .lounge {
     grid-template-columns: 1fr;
-    gap: 2rem;
-    padding: 2rem;
+    gap: 1.5rem;
+    padding: 1.5rem;
   }
 }
 
 @media (max-width: 480px) {
   .lounge {
-    margin-top: 2rem;
+    margin-top: 1.5rem;
     padding: 1.25rem;
   }
 
@@ -266,7 +271,6 @@ const etiquette = [
 
   .lounge__button {
     width: 100%;
-    padding: 0.875rem 1rem;
   }
 }
 </style>

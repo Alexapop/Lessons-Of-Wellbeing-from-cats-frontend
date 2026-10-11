@@ -1,4 +1,4 @@
-# Lessons of Wellbeing from Cats
+# Lessons of Wellbeing from Cats <img src="src/docs/home-page/mia-head-logo.png" alt="Mia" height="30"> <img src="src/docs/home-page/thor-head-logo.png" alt="Thor" height="30">
 
 This is my individual final project for the Factoría F5 Full Stack Development Bootcamp.
 
@@ -10,18 +10,17 @@ Visitors will be able to explore the sanctuary and its activities without loggin
 
 The project uses a decoupled architecture, with the frontend and backend maintained in separate repositories. This repository contains the frontend.
 
-- **[Frontend repository](https://github.com/Alexapop/Lessons-Of-Wellbeing-from-cats-frontend)**
-- **[Backend repository](https://github.com/Alexapop/Lessons-Of-Wellbeing-from-cats-backend)**
+- <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="20" height="20"> **[Frontend repository](https://github.com/Alexapop/Lessons-Of-Wellbeing-from-cats-frontend)**
+- <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="20" height="20"> **[Backend repository](https://github.com/Alexapop/Lessons-Of-Wellbeing-from-cats-backend)**
 
 ## Planned Features
 
 ### Home & Sanctuary
 
 - Explore the homepage without an account.
-- Discover the sanctuary and meet Mia and Thor.
-- Preview the wellbeing lessons, Yoga & Ayurveda activities, and Kombucha & Tea Lounge.
-- Find sanctuary opening hours, location, and payment information.
-- Navigate to the lessons page or the class calendar.
+- Discover the sanctuary, meet Mia and Thor, and navigate to the class calendar from their profile section.
+- Preview the Yoga, Ayurveda, and Kombucha & Tea Lounge sections and navigate to the calendar.
+- Find the sanctuary's logo, opening hours, location, and payment information.
 - Use a responsive layout across mobile, tablet, and desktop screens.
 
 ### Wellbeing Lessons
@@ -33,24 +32,24 @@ The project uses a decoupled architecture, with the frontend and backend maintai
 ### Class Calendar
 
 - Browse upcoming sessions without logging in.
+- Expand and collapse class details.
 - View each session's date, time, host, location, description, and duration.
-- Filter sessions by category, such as Yoga, Ayurveda, or Kombucha, and by host.
-- Open the calendar from the Yoga & Ayurveda or Kombucha & Tea Lounge sections with the corresponding category filter applied.
+- Filter sessions by category (such as Yoga, Ayurveda, or Kombucha & Tea Lounge) and by host.
 - View a **Reserve** button when logged in or a **Login to Reserve** button when logged out.
 
 ### Registration & Login
 
-- Create an account with a name, email address, phone number, location, handle, and password.
-- Register with a unique email address and handle, then proceed to the login page.
-- Log in with a handle or email address and a password.
+- Create an account with a name, email address, phone number, location, username, and password.
+- Register with a unique email address and username, then proceed to the login page.
+- Log in with a username or email address and a password.
 - See the user's name and a logout button in the header after signing in.
-- Access the user dashboard after login, or the separate admin dashboard when signing in as an administrator.
+- Access the user dashboard after logging in, or the separate admin dashboard when signing in as an administrator.
 - Log out and return to the homepage.
 
 ### Reservations & User Dashboard
 
-- Open a reservation form for a selected session, with the user's name, email address, and phone number pre-filled.
-- Provide tea or kombucha preferences when booking a Kombucha session. These preferences are required before confirming the booking.
+- As a registered user who is logged in, select a session to reserve and open a booking form with your username or email address and phone number pre-filled.
+- Provide tea or kombucha preferences when booking a Kombucha & Tea Lounge session. These preferences are required before confirming the booking.
 - Confirm a reservation and return to the dashboard.
 - View personal reservations, including their status, notes, date, host, and location.
 - Cancel confirmed reservations from the dashboard.
@@ -65,18 +64,6 @@ The project uses a decoupled architecture, with the frontend and backend maintai
 - Edit session details.
 - Delete sessions so they no longer appear in the calendar.
 
-## Frontend Technologies
-
-The frontend project is configured with:
-
-- **Vue 3** for the user interface.
-- **Vue Router** for page navigation.
-- **Pinia** for state management.
-- **Vite** for development and production builds.
-- **Vitest** and **Vue Test Utils** for unit testing.
-- **Playwright** for end-to-end testing.
-- **ESLint**, **Oxlint**, and **Prettier** for code quality and formatting.
-
 ## Project Documentation
 
 Links to the project Wiki and supporting documentation will be added as they become available.
@@ -89,8 +76,9 @@ Links to the project Wiki and supporting documentation will be added as they bec
 | Security                        | Authentication, user and admin access, and protected reservations.                 | To be added |
 | Testing                         | Instructions for running unit and end-to-end tests.                                | To be added |
 
-## Developer
+<h2 align="center">Developer</h2>
 
-| Developer | GitHub                                   |
-| --------- | ---------------------------------------- |
-| Alexa Pop | [@Alexapop](https://github.com/Alexapop) |
+<p align="center">
+  <strong>Alexa Pop</strong><br>
+  <a href="https://github.com/Alexapop"><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="20" height="20"> @Alexapop</a>
+</p>

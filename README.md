@@ -76,9 +76,17 @@ Links to the project Wiki and supporting documentation will be added as they bec
 | Security                        | Authentication, user and admin access, and protected reservations.                 | To be added |
 | Testing                         | Instructions for running unit and end-to-end tests.                                | To be added |
 
-<h2 align="center">Developer</h2>
-
-<p align="center">
-  <strong>Alexa Pop</strong><br>
-  <a href="https://github.com/Alexapop"><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="20" height="20"> @Alexapop</a>
-</p>
+<table align="center">
+  <thead>
+    <tr>
+      <th>Developer</th>
+      <th>GitHub profile</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Alexa Pop</td>
+      <td><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="24" height="24"> <a href="https://github.com/Alexapop">@Alexapop</a></td>
+    </tr>
+  </tbody>
+</table>

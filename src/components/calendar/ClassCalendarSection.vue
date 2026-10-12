@@ -1,8 +1,8 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import ClassCard from './ClassCard.vue'
-import { calendarClasses } from '../../data/ClassInformation.js'
+import { getUpcomingSessions } from '@/services/sessionService.js'
 
 const categories = [
   { value: 'all', label: 'All' },
@@ -27,8 +27,27 @@ function initialFilter(options, value) {
 const selectedCategory = ref(initialFilter(categories, route.query.category))
 const selectedHost = ref(initialFilter(hosts, route.query.host))
 
+const classes = ref([])
+const isLoading = ref(true)
+const errorMessage = ref('')
+
+async function loadSessions() {
+  isLoading.value = true
+  errorMessage.value = ''
+
+  try {
+    classes.value = await getUpcomingSessions()
+  } catch {
+    errorMessage.value = 'We could not load the sessions. Please try again later.'
+  } finally {
+    isLoading.value = false
+  }
+}
+
+onMounted(loadSessions)
+
 const filteredClasses = computed(() => {
-  return calendarClasses.filter((classItem) => {
+  return classes.value.filter((classItem) => {
     const matchesCategory =
       selectedCategory.value === 'all' || classItem.category === selectedCategory.value
 
@@ -78,20 +97,30 @@ function resetFilters() {
       </div>
     </div>
 
-    <p class="class-list__count" role="status">
-      {{ filteredClasses.length }}
-      {{ filteredClasses.length === 1 ? 'session' : 'sessions' }} found
-    </p>
+    <p v-if="isLoading" class="class-list__count" role="status">Loading sessions...</p>
 
-    <div v-if="filteredClasses.length > 0" class="class-list__grid">
-      <ClassCard v-for="classItem in filteredClasses" :key="classItem.id" :class-item="classItem" />
+    <div v-else-if="errorMessage" class="class-list__empty" role="alert">
+      <p>{{ errorMessage }}</p>
+
+      <button class="class-list__filter" type="button" @click="loadSessions">Try again</button>
     </div>
 
-    <div v-else class="class-list__empty">
-      <p>No sessions match these filters.</p>
+    <template v-else>
+      <p class="class-list__count" role="status">
+        {{ filteredClasses.length }}
+        {{ filteredClasses.length === 1 ? 'session' : 'sessions' }} found
+      </p>
 
-      <button class="class-list__filter" type="button" @click="resetFilters">Reset filters</button>
-    </div>
+      <div v-if="filteredClasses.length > 0" class="class-list__grid">
+        <ClassCard v-for="classItem in filteredClasses" :key="classItem.id" :class-item="classItem" />
+      </div>
+
+      <div v-else class="class-list__empty">
+        <p>No sessions match these filters.</p>
+
+        <button class="class-list__filter" type="button" @click="resetFilters">Reset filters</button>
+      </div>
+    </template>
   </section>
 </template>
 

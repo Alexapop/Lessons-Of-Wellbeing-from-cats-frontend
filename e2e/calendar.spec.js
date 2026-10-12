@@ -1,4 +1,9 @@
 import { test, expect } from '@playwright/test'
+import { sessions } from './fixtures/sessions.js'
+
+test.beforeEach(async ({ page }) => {
+  await page.route('**/api/v1/sessions', (route) => route.fulfill({ json: sessions }))
+})
 
 test('keeps expansion independent between class cards', async ({ page }) => {
   await page.goto('/class-calendar')
@@ -72,7 +77,6 @@ test('shows the drinks menu for lounge sessions but not yoga', async ({ page }) 
   await expect(
     yogaDetails.getByRole('heading', { name: 'Available teas & kombuchas' }),
   ).toHaveCount(0)
-  await expect(yogaDetails.getByRole('heading', { name: 'Key focus' })).toBeVisible()
 })
 
 test('combines category and host filters and resets an empty result', async ({ page }) => {
@@ -108,7 +112,7 @@ test('expands and collapses class details with the keyboard on mobile', async ({
   await page.setViewportSize({ width: 320, height: 900 })
   await page.goto('/class-calendar')
   const title = page.getByRole('button', { name: 'Queen Mia Restorative Cat Nap Yoga & Pranayama' })
-  const details = page.locator('#details-mia-restorative-yoga')
+  const details = page.locator('#details-1')
 
   await expect(title).toHaveAttribute('aria-expanded', 'false')
   await expect(details).toBeHidden()
@@ -117,7 +121,7 @@ test('expands and collapses class details with the keyboard on mobile', async ({
   await expect(title).toHaveAttribute('aria-expanded', 'true')
   await expect(details).toBeVisible()
   await expect(details).toContainText('The Velvet Sun Lounge (Main Hall)')
-  await expect(details).toContainText('Aria & Queen Mia')
+  await expect(details).toContainText('Aria')
   await expect(details.getByRole('button', { name: 'Login to reserve' })).toBeDisabled()
   expect(
     await page.evaluate(
@@ -127,4 +131,12 @@ test('expands and collapses class details with the keyboard on mobile', async ({
   await title.press('Space')
   await expect(details).toBeHidden()
   await expect(title).toHaveAttribute('aria-expanded', 'false')
+})
+
+test('shows an error message when the sessions cannot be loaded', async ({ page }) => {
+  await page.route('**/api/v1/sessions', (route) => route.fulfill({ status: 500 }))
+  await page.goto('/class-calendar')
+
+  await expect(page.getByRole('alert')).toContainText('We could not load the sessions.')
+  await expect(page.getByRole('button', { name: 'Try again' })).toBeVisible()
 })

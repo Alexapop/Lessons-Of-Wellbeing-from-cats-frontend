@@ -51,3 +51,7 @@ eslint.config.js
 .gitattributes
 .editorconfig
 .vscode/
+# Environment variables
+.env
+.env.*
+!.env.example

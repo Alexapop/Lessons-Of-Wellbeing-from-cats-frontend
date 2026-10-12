@@ -105,7 +105,7 @@ function toggleDetails() {
         </ul>
       </div>
 
-      <div class="class-card__focus">
+      <div v-if="classItem.focus.length > 0" class="class-card__focus">
         <h3>Key focus</h3>
 
         <ul>

@@ -1,22 +1,52 @@
-﻿<script setup>
-import { onMounted, onBeforeUnmount, ref } from 'vue'
+<script setup>
+import { computed, onMounted, onBeforeUnmount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import HomeSanctuary from './HomeSanctuary.vue'
 
 const router = useRouter()
 const loginDialog = ref(null)
-const identifier = ref('')
+const email = ref('')
 const password = ref('')
 const showPassword = ref(false)
+const emailTouched = ref(false)
+const passwordTouched = ref(false)
+const statusMessage = ref('')
+
+const emailError = computed(() => {
+  if (!emailTouched.value) return ''
+  const value = email.value.trim()
+  if (!value) return 'Enter your email address.'
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+    return 'Enter a valid email address.'
+  }
+  return ''
+})
+
+const passwordError = computed(() => {
+  if (passwordTouched.value && !password.value.trim()) return 'Enter your password.'
+  return ''
+})
+
+function submitLogin() {
+  emailTouched.value = true
+  passwordTouched.value = true
+  statusMessage.value = ''
+
+  if (emailError.value) {
+    loginDialog.value.querySelector('#login-email').focus()
+    return
+  }
+  if (passwordError.value) {
+    loginDialog.value.querySelector('#login-password').focus()
+    return
+  }
+
+  statusMessage.value = 'Form validated. Sign in is not available yet.'
+}
 let previousOverflow = ''
 
 function closeLogin() {
   router.push('/')
-}
-
-function fillDemoAccount() {
-  identifier.value = 'demo'
-  password.value = 'demo'
 }
 
 onMounted(() => {
@@ -56,26 +86,33 @@ onBeforeUnmount(() => {
       <p id="login-description">Sign in to access your bookings and sanctuary experiences.</p>
     </header>
 
-    <form class="login-form" aria-label="Sign in" @submit.prevent>
+    <form class="login-form" aria-label="Sign in" novalidate @submit.prevent="submitLogin">
       <div class="login-field">
-        <label for="login-identifier">Email address or username *</label>
+        <label for="login-email">Email address *</label>
         <div class="login-input">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="12" cy="7" r="4" />
             <path d="M5 21v-2a7 7 0 0 1 14 0v2" />
           </svg>
           <input
-            id="login-identifier"
-            v-model="identifier"
-            name="identifier"
-            type="text"
-            autocomplete="username"
+            id="login-email"
+            v-model="email"
+            :aria-invalid="Boolean(emailError)"
+            :aria-describedby="emailError ? 'login-email-error' : undefined"
+            @blur="emailTouched = true"
+            @input="statusMessage = ''"
+            name="email"
+            type="email"
+            autocomplete="email"
             autocapitalize="none"
             :spellcheck="false"
-            placeholder="e.g. demo or elena@example.com"
+            placeholder="e.g. elena@example.com"
             required
           />
         </div>
+        <p v-if="emailError" id="login-email-error" class="login-error" role="alert">
+          {{ emailError }}
+        </p>
       </div>
 
       <div class="login-field">
@@ -88,6 +125,10 @@ onBeforeUnmount(() => {
           <input
             id="login-password"
             v-model="password"
+            :aria-invalid="Boolean(passwordError)"
+            :aria-describedby="passwordError ? 'login-password-error' : undefined"
+            @blur="passwordTouched = true"
+            @input="statusMessage = ''"
             name="password"
             :type="showPassword ? 'text' : 'password'"
             autocomplete="current-password"
@@ -110,19 +151,13 @@ onBeforeUnmount(() => {
         </div>
       </div>
 
-      <button class="login-submit" type="submit" disabled title="Sign in will be available soon">
-        Sign In
-      </button>
-    </form>
+      <p v-if="passwordError" id="login-password-error" class="login-error" role="alert">
+        {{ passwordError }}
+      </p>
 
-    <div class="login-demo">
-      <button type="button" @click="fillDemoAccount">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="m9 3 2 6 6 2-6 2-2 6-2-6-6-2 6-2 2-6ZM19 2v6M16 5h6M19 16v6M16 19h6" />
-        </svg>
-        Fill demo account ("demo" / "demo")
-      </button>
-    </div>
+      <button class="login-submit" type="submit">Sign In</button>
+      <p class="login-status" role="status">{{ statusMessage }}</p>
+    </form>
 
     <p class="login-register">
       New to the sanctuary?
@@ -282,31 +317,27 @@ onBeforeUnmount(() => {
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  cursor: not-allowed;
-}
-
-.login-demo {
-  margin-top: 24px;
-  padding: 10px 0 24px;
-  border-top: 1px solid #f5f5f4;
-  border-bottom: 1px solid #f5f5f4;
-  text-align: center;
-}
-
-.login-demo button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 8px 14px;
-  border: 1px solid var(--color-border);
-  background: #f5f5f4;
-  color: var(--color-text);
-  font: inherit;
-  font-size: 14px;
-  font-weight: 700;
-  text-transform: uppercase;
   cursor: pointer;
+}
+
+.login-error {
+  margin: 0;
+  color: #b42318;
+  font-size: 13px;
+}
+
+.login-input:has(input[aria-invalid='true']) {
+  border-color: #b42318;
+}
+
+.login-status {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+}
+
+.login-status:empty {
+  display: none;
 }
 
 .login-register {
@@ -342,9 +373,6 @@ button:focus-visible {
   }
   .login-input input {
     font-size: 16px;
-  }
-  .login-demo button {
-    font-size: 12px;
   }
 }
 </style>

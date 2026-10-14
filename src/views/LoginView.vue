@@ -2,8 +2,13 @@
 import { computed, onMounted, onBeforeUnmount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import HomeSanctuary from './HomeSanctuary.vue'
+import { useAuthStore } from '@/stores/auth'
+import { getLoginError } from '@/services/authService'
 
 const router = useRouter()
+const auth = useAuthStore()
+const isSubmitting = ref(false)
+let isActive = true
 const loginDialog = ref(null)
 const email = ref('')
 const password = ref('')
@@ -27,7 +32,8 @@ const passwordError = computed(() => {
   return ''
 })
 
-function submitLogin() {
+async function submitLogin() {
+  if (isSubmitting.value) return
   emailTouched.value = true
   passwordTouched.value = true
   statusMessage.value = ''
@@ -41,7 +47,16 @@ function submitLogin() {
     return
   }
 
-  statusMessage.value = 'Form validated. Sign in is not available yet.'
+  isSubmitting.value = true
+  try {
+    await auth.login(email.value.trim(), password.value)
+    password.value = ''
+    if (isActive) await router.replace({ name: 'dashboard' })
+  } catch (error) {
+    statusMessage.value = getLoginError(error)
+  } finally {
+    isSubmitting.value = false
+  }
 }
 let previousOverflow = ''
 
@@ -56,6 +71,7 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  isActive = false
   document.body.style.overflow = previousOverflow
   loginDialog.value?.close()
 })
@@ -155,7 +171,9 @@ onBeforeUnmount(() => {
         {{ passwordError }}
       </p>
 
-      <button class="login-submit" type="submit">Sign In</button>
+      <button class="login-submit" type="submit" :disabled="isSubmitting" :aria-busy="isSubmitting">
+        {{ isSubmitting ? 'Signing in...' : 'Sign In' }}
+      </button>
       <p class="login-status" role="status">{{ statusMessage }}</p>
     </form>
 

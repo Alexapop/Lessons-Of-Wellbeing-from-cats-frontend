@@ -1,7 +1,22 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { watch } from 'vue'
+import { RouterLink, RouterView, useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 import Footer from './components/layout/Footer.vue'
 import Logo from './components/layout/Logo.vue'
+const auth = useAuthStore()
+const router = useRouter()
+
+watch(() => auth.isAuthenticated, (authenticated) => {
+  if (!authenticated && router.currentRoute.value.meta.requiresAuth) {
+    router.replace({ name: 'login' })
+  }
+})
+
+async function logout() {
+  await router.replace({ name: 'home' })
+  auth.logout()
+}
 </script>
 
 <template>
@@ -69,6 +84,27 @@ import Logo from './components/layout/Logo.vue'
 
           Class Calendar
         </RouterLink>
+        <RouterLink v-if="!auth.isAuthenticated" class="site-nav__link site-nav__login" to="/login">
+          <svg
+            class="site-nav__icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M14 3h6v18h-6M3 12h12M9 6l6 6-6 6" />
+          </svg>
+          Login
+        </RouterLink>
+        <template v-else>
+          <RouterLink class="site-nav__link" to="/dashboard">{{ auth.fullName }}</RouterLink>
+          <button class="site-nav__link site-nav__login logout-button" type="button" @click="logout">
+            Logout
+          </button>
+        </template>
       </nav>
     </div>
   </header>
@@ -78,6 +114,11 @@ import Logo from './components/layout/Logo.vue'
 </template>
 
 <style scoped>
+.logout-button {
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
+}
 .site-header {
   border-bottom: 1px solid var(--color-border);
   background-color: var(--color-background);
@@ -124,6 +165,23 @@ import Logo from './components/layout/Logo.vue'
   height: 1.1rem;
   flex-shrink: 0;
   color: #00664f;
+}
+.site-nav__login {
+  padding: 0.4rem 1.25rem;
+  border: 1px solid var(--color-text);
+}
+
+.site-nav__login:hover {
+  background-color: #f5f5f4;
+}
+
+.site-nav__login:focus-visible {
+  outline: 2px solid #00664f;
+  outline-offset: 3px;
+}
+
+.site-nav__login .site-nav__icon {
+  color: currentColor;
 }
 @media (max-width: 600px) {
   .site-header__container {

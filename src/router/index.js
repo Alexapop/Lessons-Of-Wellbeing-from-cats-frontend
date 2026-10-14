@@ -3,10 +3,18 @@ import HomeSanctuary from '../views/HomeSanctuary.vue'
 import ClassCalendar from '@/views/ClassCalendar.vue'
 import WellbeingLessons from '@/views/WellbeingLessons.vue'
 import LoginView from '@/views/LoginView.vue'
+import DashboardView from '@/views/DashboardView.vue'
+import { useAuthStore } from '@/stores/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: DashboardView,
+      meta: { requiresAuth: true },
+    },
     {
       path: '/login',
       name: 'login',
@@ -30,6 +38,13 @@ const router = createRouter({
       component: ClassCalendar,
     },
   ],
+})
+
+router.beforeEach((to) => {
+  const auth = useAuthStore()
+  const authenticated = auth.hasValidSession()
+  if (to.meta.requiresAuth && !authenticated) return { name: 'login' }
+  if (to.name === 'login' && authenticated) return { name: 'dashboard' }
 })
 
 export default router

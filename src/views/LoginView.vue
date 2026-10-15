@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, onBeforeUnmount, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import HomeSanctuary from './HomeSanctuary.vue'
 import { useAuthStore } from '@/stores/auth'
 import { getLoginError } from '@/services/authService'
@@ -179,9 +179,7 @@ onBeforeUnmount(() => {
 
     <p class="login-register">
       New to the sanctuary?
-      <a role="link" aria-disabled="true" title="Registration will be available soon"
-        >Create profile here</a
-      >
+      <RouterLink :to="{ name: 'register' }">Create profile here</RouterLink>
     </p>
   </dialog>
 </template>
@@ -370,7 +368,7 @@ onBeforeUnmount(() => {
   color: var(--color-heading);
   font-weight: 700;
   text-decoration: underline;
-  cursor: not-allowed;
+  cursor: pointer;
 }
 
 button:focus-visible {

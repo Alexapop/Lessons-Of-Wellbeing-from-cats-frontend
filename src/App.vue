@@ -105,6 +105,26 @@ async function logout() {
             Logout
           </button>
         </template>
+        <RouterLink
+          v-if="!auth.isAuthenticated"
+          class="site-nav__link site-nav__join"
+          :to="{ name: 'register' }"
+        >
+          <svg
+            class="site-nav__icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="7" r="4" />
+            <path d="M5 21v-2a7 7 0 0 1 14 0v2" />
+          </svg>
+          Join Sanctuary
+        </RouterLink>
       </nav>
     </div>
   </header>
@@ -183,6 +203,26 @@ async function logout() {
 .site-nav__login .site-nav__icon {
   color: currentColor;
 }
+.site-nav__join {
+  padding: 0.4rem 1.25rem;
+  border: 1px solid var(--color-text);
+  background: var(--color-text);
+  color: white;
+}
+
+.site-nav__join .site-nav__icon {
+  color: currentColor;
+}
+
+.site-nav__join:hover {
+  background: #44403c;
+}
+
+.site-nav__join:focus-visible {
+  outline: 2px solid #00664f;
+  outline-offset: 3px;
+}
+
 @media (max-width: 600px) {
   .site-header__container {
     flex-direction: column;

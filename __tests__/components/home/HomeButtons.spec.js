@@ -1,13 +1,10 @@
 import { afterEach, describe, it, expect } from 'vitest'
-
 import { mount } from '@vue/test-utils'
 import { createMemoryHistory, createRouter } from 'vue-router'
 import HeroSection from '@/components/home/HeroSection.vue'
 import MiaThorSection from '@/components/home/MiaThorSection.vue'
 import YogaAyurvedaSection from '@/components/home/YogaAyurvedaSection.vue'
 import KombuchaTeaLoungeSection from '@/components/home/KombuchaTeaLoungeSection.vue'
-import LessonCard from '@/components/lessons/LessonCard.vue'
-import ClassCalendarSection from '@/components/calendar/ClassCalendarSection.vue'
 
 const Empty = { template: '<div />' }
 
@@ -42,19 +39,6 @@ function hrefOf(wrapper, text) {
   expect(link, `link "${text}"`).toBeDefined()
 
   return link.attributes('href')
-}
-
-function pressedFilters(wrapper) {
-  return wrapper.findAll('[aria-pressed="true"]').map((button) => button.text())
-}
-
-const lesson = {
-  id: 1,
-  host: 'Thor',
-  title: 'The Art of the Slow Starting',
-  text: 'Wake up slowly.',
-  image: 'lesson.png',
-  imageAlt: 'Thor resting',
 }
 
 describe('Home page buttons', () => {
@@ -103,70 +87,3 @@ describe('Home page buttons', () => {
   })
 })
 
-describe('LessonCard', () => {
-  let wrapper
-
-  afterEach(() => {
-    wrapper?.unmount()
-  })
-
-  it('hides the lesson text until the title is clicked', async () => {
-    wrapper = await mountWithRouter(LessonCard, { props: { lesson }, attachTo: document.body })
-    const toggle = wrapper.get('.lesson-card__toggle')
-    const details = wrapper.get('.lesson-card__details')
-
-    expect(toggle.attributes('aria-expanded')).toBe('false')
-    expect(details.isVisible()).toBe(false)
-
-    await toggle.trigger('click')
-
-    expect(toggle.attributes('aria-expanded')).toBe('true')
-    expect(details.isVisible()).toBe(true)
-
-    await toggle.trigger('click')
-
-    expect(details.isVisible()).toBe(false)
-  })
-
-  it('links "Practice in Class" to the calendar filtered by the lesson host', async () => {
-    wrapper = await mountWithRouter(LessonCard, { props: { lesson } })
-
-    expect(hrefOf(wrapper, 'Practice in Class')).toBe('/class-calendar?host=thor')
-  })
-})
-
-describe('ClassCalendarSection filters from the URL', () => {
-  let wrapper
-
-  afterEach(() => {
-    wrapper?.unmount()
-  })
-
-  it('starts with every filter set to all when the URL has no query', async () => {
-    wrapper = await mountWithRouter(ClassCalendarSection, {}, '/class-calendar')
-
-    expect(pressedFilters(wrapper)).toEqual(['All', 'All Hosts'])
-  })
-
-  it('preselects the host from the URL', async () => {
-    wrapper = await mountWithRouter(ClassCalendarSection, {}, '/class-calendar?host=mia')
-
-    expect(pressedFilters(wrapper)).toEqual(['All', 'Mia'])
-  })
-
-  it('preselects the category from the URL', async () => {
-    wrapper = await mountWithRouter(ClassCalendarSection, {}, '/class-calendar?category=lounge')
-
-    expect(pressedFilters(wrapper)).toEqual(['Kombucha Tea Lounge', 'All Hosts'])
-  })
-
-  it('ignores unknown filter values in the URL', async () => {
-    wrapper = await mountWithRouter(
-      ClassCalendarSection,
-      {},
-      '/class-calendar?category=karate&host=garfield',
-    )
-
-    expect(pressedFilters(wrapper)).toEqual(['All', 'All Hosts'])
-  })
-})

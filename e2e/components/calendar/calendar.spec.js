@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { sessions } from './fixtures/sessions.js'
+import { sessions } from './sessions.js'
 
 test.beforeEach(async ({ page }) => {
   await page.route('**/api/v1/sessions', (route) => route.fulfill({ json: sessions }))

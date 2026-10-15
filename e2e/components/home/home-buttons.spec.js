@@ -1,3 +1,4 @@
+import { expectSelectedFilters } from '../calendar/filterAssertions.js'
 import { test, expect } from '@playwright/test'
 
 const calendarLinks = [
@@ -16,20 +17,6 @@ const calendarLinks = [
     host: 'All Hosts',
   },
 ]
-
-async function expectSelectedFilters(page, category, host) {
-  const categories = page.getByRole('group', { name: 'Filter by category' })
-  const hosts = page.getByRole('group', { name: 'Filter by host' })
-
-  await expect(categories.getByRole('button', { name: category, exact: true })).toHaveAttribute(
-    'aria-pressed',
-    'true',
-  )
-  await expect(hosts.getByRole('button', { name: host, exact: true })).toHaveAttribute(
-    'aria-pressed',
-    'true',
-  )
-}
 
 test('hero buttons open the class calendar and the wellbeing lessons', async ({ page }) => {
   await page.goto('/')
@@ -52,13 +39,3 @@ for (const link of calendarLinks) {
   })
 }
 
-test('"Practice in Class" opens the calendar filtered by the lesson host', async ({ page }) => {
-  await page.goto('/wellbeing-lessons')
-  await page.getByRole('button', { name: 'The Art of the Slow Starting' }).click()
-  await page
-    .getByRole('link', { name: /Practice in Class/ })
-    .first()
-    .click()
-  await expect(page).toHaveURL(/\/class-calendar\?host=thor$/)
-  await expectSelectedFilters(page, 'All', 'Thor')
-})

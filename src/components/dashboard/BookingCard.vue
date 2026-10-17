@@ -6,6 +6,10 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  isCancelling: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const emit = defineEmits(['cancel'])
@@ -43,7 +47,11 @@ const timeRange = computed(
 </script>
 
 <template>
-  <article class="booking-card" :aria-labelledby="`booking-title-${booking.id}`">
+  <article
+    class="booking-card"
+    :class="{ 'booking-card--cancelled': !isConfirmed }"
+    :aria-labelledby="`booking-title-${booking.id}`"
+  >
     <div class="booking-card__content">
       <div class="booking-card__meta">
         <span class="booking-card__category">{{ categoryLabels[session.category] }}</span>
@@ -81,13 +89,14 @@ const timeRange = computed(
       v-if="isConfirmed"
       class="booking-card__cancel"
       type="button"
+      :disabled="isCancelling"
       @click="emit('cancel', booking)"
     >
       <svg class="booking-card__icon" viewBox="0 0 24 24" aria-hidden="true">
         <circle cx="12" cy="12" r="9" />
         <path d="m15 9-6 6M9 9l6 6" />
       </svg>
-      Cancel Booking
+      {{ isCancelling ? 'Cancelling...' : 'Cancel Booking' }}
     </button>
   </article>
 </template>
@@ -145,8 +154,26 @@ const timeRange = computed(
 }
 
 .booking-card__status--cancelled {
-  color: #78716c;
-  background-color: #f5f5f4;
+  border-color: #fbcfe8;
+  color: #be185d;
+  background-color: #fff1f2;
+}
+
+.booking-card--cancelled {
+  background-color: #fdfcfb;
+}
+
+.booking-card--cancelled .booking-card__category,
+.booking-card--cancelled .booking-card__host,
+.booking-card--cancelled .booking-card__title,
+.booking-card--cancelled .booking-card__details,
+.booking-card--cancelled .booking-card__notes {
+  color: #8a8580;
+}
+
+.booking-card--cancelled .booking-card__details,
+.booking-card--cancelled .booking-card__notes {
+  opacity: 0.8;
 }
 
 .booking-card__title {
@@ -214,6 +241,11 @@ const timeRange = computed(
 
 .booking-card__cancel:hover {
   background-color: #fff1f2;
+}
+
+.booking-card__cancel:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .booking-card__cancel:focus-visible {

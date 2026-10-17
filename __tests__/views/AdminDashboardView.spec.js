@@ -26,6 +26,7 @@ async function mountAdmin() {
       { path: '/', name: 'home', component: Empty },
       { path: '/admin', name: 'admin', component: Empty },
       { path: '/admin/reservations', name: 'admin-reservations', component: Empty },
+      { path: '/admin/sessions/new', name: 'admin-session-new', component: Empty },
       { path: '/dashboard', name: 'dashboard', component: Empty },
       { path: '/class-calendar', name: 'class-calendar', component: Empty },
     ],

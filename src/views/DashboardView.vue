@@ -1,11 +1,17 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
-import { RouterLink, useRoute } from 'vue-router'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useBookingsStore } from '@/stores/bookings'
+import UserProfileCard from '@/components/dashboard/UserProfileCard.vue'
+import BookingCard from '@/components/dashboard/BookingCard.vue'
 
 const auth = useAuthStore()
+const bookingsStore = useBookingsStore()
 const route = useRoute()
+const router = useRouter()
 const errorMessage = ref('')
+const statusMessage = ref('')
 const bookingConfirmed = computed(() => route.query.booking === 'confirmed')
 
 async function loadProfile() {
@@ -19,45 +25,214 @@ async function loadProfile() {
   }
 }
 
-onMounted(loadProfile)
+async function logout() {
+  await router.replace({ name: 'home' })
+  auth.logout()
+}
+
+function cancelBooking() {
+  // Cancelling is part of the next story (Cancel Booking); the button is shown already.
+  statusMessage.value = 'Cancelling a booking will be available soon.'
+}
+
+onMounted(() => {
+  loadProfile()
+  bookingsStore.loadMyBookings()
+})
 </script>
 
 <template>
-  <main class="dashboard">
-    <h1>Your dashboard</h1>
+  <main class="dashboard" aria-labelledby="dashboard-title">
+    <h1 id="dashboard-title" class="visually-hidden">Your dashboard</h1>
+
     <p v-if="bookingConfirmed" class="dashboard__success" role="status">
       Your booking is confirmed. We look forward to seeing you!
     </p>
-    <p>Welcome, {{ auth.fullName }}.</p>
-    <p v-if="auth.user">{{ auth.user.email }}</p>
-    <div v-if="errorMessage" role="alert">
+
+    <div v-if="errorMessage" class="dashboard__error" role="alert">
       <p>{{ errorMessage }}</p>
-      <button type="button" @click="loadProfile">Try again</button>
+      <button class="dashboard__secondary" type="button" @click="loadProfile">Try again</button>
     </div>
-    <RouterLink to="/class-calendar">Explore the class calendar</RouterLink>
+
+    <UserProfileCard v-if="auth.user" :user="auth.user" @logout="logout" />
+
+    <section class="dashboard__reservations" aria-labelledby="reservations-title">
+      <header class="dashboard__reservations-header">
+        <h2 id="reservations-title" class="dashboard__reservations-title">
+          <svg class="dashboard__icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="5" width="18" height="16" rx="2" />
+            <path d="M16 3v4M8 3v4M3 11h18" />
+          </svg>
+          Your Reservations ({{ bookingsStore.bookings.length }})
+        </h2>
+
+        <RouterLink class="dashboard__primary" :to="{ name: 'class-calendar' }">
+          + Reserve more classes or tea &amp; kombucha visits
+        </RouterLink>
+      </header>
+
+      <p class="dashboard__status" role="status">{{ statusMessage }}</p>
+
+      <p v-if="bookingsStore.isLoading" class="dashboard__muted" role="status">
+        Loading your reservations...
+      </p>
+
+      <div v-else-if="bookingsStore.errorMessage" class="dashboard__error" role="alert">
+        <p>{{ bookingsStore.errorMessage }}</p>
+        <button class="dashboard__secondary" type="button" @click="bookingsStore.loadMyBookings">
+          Try again
+        </button>
+      </div>
+
+      <p v-else-if="bookingsStore.bookings.length === 0" class="dashboard__empty">
+        You have no reservations yet.
+      </p>
+
+      <div v-else class="dashboard__list">
+        <BookingCard
+          v-for="booking in bookingsStore.bookings"
+          :key="booking.id"
+          :booking="booking"
+          @cancel="cancelBooking"
+        />
+      </div>
+    </section>
   </main>
 </template>
 
 <style scoped>
 .dashboard {
   width: calc(100% - 2 * var(--page-gutter));
-  max-width: var(--page-width);
-  margin: 3rem auto;
+  max-width: 1200px;
+  margin: 5rem auto;
   min-height: 40vh;
 }
+
 .dashboard__success {
+  margin-bottom: 1.5rem;
   padding: 1rem;
   border: 1px solid #00664f;
   color: #00664f;
   font-weight: 700;
 }
-h1 {
-  font-family: var(--font-heading);
-  color: var(--color-heading);
+
+.dashboard__reservations {
+  margin-top: 2.5rem;
 }
-a {
-  display: inline-block;
-  margin-top: 1rem;
+
+.dashboard__reservations-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.dashboard__reservations-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
   color: var(--color-heading);
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.dashboard__icon {
+  width: 26px;
+  height: 26px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.dashboard__primary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.6rem 1.25rem;
+  background-color: var(--color-text);
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.dashboard__secondary {
+  min-height: 2.75rem;
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.dashboard__primary:focus-visible,
+.dashboard__secondary:focus-visible {
+  outline: 2px solid #00664f;
+  outline-offset: 3px;
+}
+
+.dashboard__list {
+  display: grid;
+  gap: 1rem;
+}
+
+.dashboard__status {
+  margin: 0 0 1rem;
+  color: var(--color-text-secondary);
+}
+
+.dashboard__status:empty {
+  display: none;
+}
+
+.dashboard__muted,
+.dashboard__empty {
+  color: var(--color-text-secondary);
+}
+
+.dashboard__empty,
+.dashboard__error {
+  padding: 2rem;
+  border: 1px solid var(--color-border);
+  text-align: center;
+}
+
+.dashboard__error {
+  margin-bottom: 1.5rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+  .dashboard {
+    margin: 2.5rem auto;
+  }
+
+  .dashboard__reservations-title {
+    font-size: 1.5rem;
+  }
+
+  .dashboard__primary {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
 }
 </style>

@@ -75,6 +75,7 @@ onMounted(loadSummary)
     </dl>
 
     <div class="admin__actions">
+      <RouterLink class="admin__primary" :to="{ name: 'admin-session-new' }">+ Create session</RouterLink>
       <RouterLink class="admin__primary" :to="{ name: 'admin-reservations' }">
         View all reservations
       </RouterLink>

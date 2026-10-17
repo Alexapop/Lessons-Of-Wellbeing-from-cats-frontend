@@ -51,7 +51,7 @@ async function submitLogin() {
   try {
     await auth.login(email.value.trim(), password.value)
     password.value = ''
-    if (isActive) await router.replace({ name: 'dashboard' })
+    if (isActive) await router.replace({ name: auth.homeRoute })
   } catch (error) {
     statusMessage.value = getLoginError(error)
   } finally {

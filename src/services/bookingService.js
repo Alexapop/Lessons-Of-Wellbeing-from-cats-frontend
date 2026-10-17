@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { toClassItem } from '@/services/sessionService.js'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL ?? 'http://localhost:8080/api/v1',
@@ -11,6 +12,24 @@ export async function createBooking(booking, token) {
   })
 
   return response.data
+}
+
+export function toBookingItem(booking) {
+  return {
+    id: booking.id,
+    status: booking.status,
+    notes: booking.notes ?? '',
+    createdAt: booking.createdAt,
+    session: toClassItem(booking.session),
+  }
+}
+
+export async function getMyBookings(token) {
+  const response = await api.get('/bookings/me', {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+
+  return response.data.map(toBookingItem)
 }
 
 export function getBookingError(error) {

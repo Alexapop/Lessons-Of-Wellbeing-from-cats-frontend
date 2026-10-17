@@ -74,7 +74,12 @@ onMounted(loadSummary)
       </div>
     </dl>
 
-    <RouterLink class="admin__primary" :to="{ name: 'class-calendar' }">View class calendar</RouterLink>
+    <div class="admin__actions">
+      <RouterLink class="admin__primary" :to="{ name: 'admin-reservations' }">
+        View all reservations
+      </RouterLink>
+      <RouterLink class="admin__secondary" :to="{ name: 'class-calendar' }">View class calendar</RouterLink>
+    </div>
   </main>
 </template>
 
@@ -151,6 +156,12 @@ onMounted(loadSummary)
   font-family: var(--font-heading);
   font-size: 2rem;
   font-weight: 700;
+}
+
+.admin__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
 
 .admin__error {

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 
-import { getBookingError, toBookingItem } from '@/services/bookingService.js'
+import { getBookingError, getCancelError, toBookingItem } from '@/services/bookingService.js'
 
 describe('getBookingError', () => {
   it('uses the backend message for 400 errors', () => {
@@ -17,6 +17,17 @@ describe('getBookingError', () => {
     expect(getBookingError({ response: { status: 409 } })).toBe('You have already booked this session.')
     expect(getBookingError({ response: { status: 500 } })).toBe(
       'Booking is temporarily unavailable. Please try again later.',
+    )
+  })
+})
+
+describe('getCancelError', () => {
+  it('explains network, not found, conflict and server errors', () => {
+    expect(getCancelError({})).toBe('Unable to reach the server. Please try again.')
+    expect(getCancelError({ response: { status: 404 } })).toBe('This booking could not be found.')
+    expect(getCancelError({ response: { status: 409 } })).toBe('This booking is already cancelled.')
+    expect(getCancelError({ response: { status: 500 } })).toBe(
+      'Cancelling is temporarily unavailable. Please try again later.',
     )
   })
 })

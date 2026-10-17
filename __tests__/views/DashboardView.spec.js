@@ -4,12 +4,13 @@ import { createPinia, setActivePinia } from 'pinia'
 import { createMemoryHistory, createRouter } from 'vue-router'
 import DashboardView from '@/views/DashboardView.vue'
 import { useAuthStore } from '@/stores/auth'
-import { getMyBookings } from '@/services/bookingService.js'
+import { cancelBooking, getMyBookings } from '@/services/bookingService.js'
 import { getCurrentUser } from '@/services/authService'
 
 vi.mock('@/services/bookingService.js', async (importOriginal) => ({
   ...(await importOriginal()),
   getMyBookings: vi.fn(),
+  cancelBooking: vi.fn(),
 }))
 
 vi.mock('@/services/authService', async (importOriginal) => ({
@@ -106,8 +107,9 @@ describe('DashboardView', () => {
     ;({ wrapper } = await mountDashboard())
 
     expect(getMyBookings).toHaveBeenCalledWith('token-123')
-    expect(wrapper.text()).toContain('Your Reservations (2)')
     expect(wrapper.findAll('article')).toHaveLength(2)
+    // The heading counts only the confirmed bookings.
+    expect(wrapper.text()).toContain('Your Reservations (1)')
   })
 
   it('shows Cancel Booking only for confirmed bookings', async () => {
@@ -118,6 +120,38 @@ describe('DashboardView', () => {
       .findAll('button')
       .filter((button) => button.text() === 'Cancel Booking')
     expect(cancelButtons).toHaveLength(1)
+  })
+
+  it('cancels a booking, shows it as cancelled and removes its cancel button', async () => {
+    getMyBookings.mockResolvedValue([confirmedBooking])
+    cancelBooking.mockResolvedValue({ ...confirmedBooking, status: 'CANCELLED' })
+    ;({ wrapper } = await mountDashboard())
+
+    expect(wrapper.text()).toContain('Your Reservations (1)')
+    const cancelButton = wrapper.findAll('button').find((button) => button.text() === 'Cancel Booking')
+    await cancelButton.trigger('click')
+    await flushPromises()
+
+    expect(cancelBooking).toHaveBeenCalledWith(1, 'token-123')
+    expect(wrapper.text()).toContain('Cancelled')
+    expect(wrapper.text()).toContain('Your Reservations (0)')
+    expect(wrapper.findAll('button').some((button) => button.text() === 'Cancel Booking')).toBe(false)
+    expect(wrapper.text()).toContain(
+      'Your booking for “Queen Mia Restorative Cat Nap Yoga & Pranayama” has been cancelled.',
+    )
+  })
+
+  it('keeps the booking confirmed and shows an error when cancelling fails', async () => {
+    getMyBookings.mockResolvedValue([confirmedBooking])
+    cancelBooking.mockRejectedValue({ response: { status: 409 } })
+    ;({ wrapper } = await mountDashboard())
+
+    const cancelButton = wrapper.findAll('button').find((button) => button.text() === 'Cancel Booking')
+    await cancelButton.trigger('click')
+    await flushPromises()
+
+    expect(wrapper.text()).toContain('This booking is already cancelled.')
+    expect(wrapper.text()).toContain('Confirmed')
   })
 
   it('shows an empty state when there are no bookings', async () => {

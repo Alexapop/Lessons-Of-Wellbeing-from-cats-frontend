@@ -61,11 +61,19 @@ describe('BookingCard', () => {
     expect(wrapper.emitted('cancel')[0][0]).toEqual(booking)
   })
 
-  it('hides Cancel Booking for cancelled bookings', () => {
+  it('shows cancelled bookings faded and without Cancel Booking', () => {
     const wrapper = mount(BookingCard, { props: { booking: createBooking({ status: 'CANCELLED' }) } })
 
     expect(wrapper.text()).toContain('Cancelled')
+    expect(wrapper.get('article').classes()).toContain('booking-card--cancelled')
     expect(wrapper.find('button').exists()).toBe(false)
+  })
+
+  it('disables the button while the booking is being cancelled', () => {
+    const wrapper = mount(BookingCard, { props: { booking: createBooking(), isCancelling: true } })
+
+    expect(wrapper.get('button').text()).toBe('Cancelling...')
+    expect(wrapper.get('button').attributes('disabled')).toBeDefined()
   })
 
   it('hides the note when the booking has none', () => {

@@ -5,10 +5,16 @@ import { createMemoryHistory, createRouter } from 'vue-router'
 import ReservationForm from '@/components/booking/ReservationForm.vue'
 import { useAuthStore } from '@/stores/auth'
 import { getSessionById } from '@/services/sessionService.js'
+import { submitReservation } from '@/services/reservationService.js'
 
 vi.mock('@/services/sessionService.js', async (importOriginal) => ({
   ...(await importOriginal()),
   getSessionById: vi.fn(),
+}))
+
+vi.mock('@/services/reservationService.js', async (importOriginal) => ({
+  ...(await importOriginal()),
+  submitReservation: vi.fn(),
 }))
 
 const Empty = { template: '<div />' }
@@ -22,6 +28,20 @@ const session = {
   duration: 90,
   location: 'Sunbeam Studio',
   guide: 'Leo',
+  category: 'yoga',
+  drinks: [],
+}
+
+const loungeSession = {
+  ...session,
+  id: 2,
+  title: 'Kombucha Tea Tasting & Cat Meet & Greet',
+  category: 'lounge',
+  drinks: ['Hibiscus Rose Sparkle Kombucha'],
+}
+
+function confirmButton(wrapper) {
+  return wrapper.get('button[type="submit"]')
 }
 
 async function mountForm() {
@@ -84,18 +104,93 @@ describe('ReservationForm', () => {
     expect(wrapper.get('#reservation-phone').element.value).toBe('+34 612 345 678')
   })
 
-  it('emits the reservation details when the form is valid', async () => {
+  it('sends the reservation and emits the details when the form is valid', async () => {
     getSessionById.mockResolvedValue(session)
+    submitReservation.mockResolvedValue({})
     ;({ wrapper } = await mountForm())
 
     await wrapper.get('form').trigger('submit')
+    await flushPromises()
 
-    expect(wrapper.emitted('confirm')[0][0]).toEqual({
-      sessionId: 7,
+    const details = {
       name: 'Elena Vance',
       email: 'elena@example.com',
       phone: '+34 612 345 678',
+      notes: '',
+    }
+    expect(submitReservation).toHaveBeenCalledWith(7, details, 'token-123')
+    expect(wrapper.emitted('confirm')[0][0]).toEqual({ sessionId: 7, ...details })
+  })
+
+  it('does not ask for notes on non Kombucha/Tea sessions', async () => {
+    getSessionById.mockResolvedValue(session)
+    ;({ wrapper } = await mountForm())
+
+    expect(wrapper.find('#reservation-notes').exists()).toBe(false)
+    expect(confirmButton(wrapper).text()).toBe('Confirm Booking')
+    expect(confirmButton(wrapper).attributes('disabled')).toBeUndefined()
+  })
+
+  it('disables Confirm Booking while the notes are empty on a Kombucha/Tea session', async () => {
+    getSessionById.mockResolvedValue(loungeSession)
+    ;({ wrapper } = await mountForm())
+
+    expect(wrapper.find('#reservation-notes').exists()).toBe(true)
+    expect(confirmButton(wrapper).attributes('disabled')).toBeDefined()
+
+    await wrapper.get('#reservation-notes').setValue('   ')
+    expect(confirmButton(wrapper).attributes('disabled')).toBeDefined()
+
+    await wrapper.get('#reservation-notes').setValue('Hibiscus Rose, less sugar')
+    expect(confirmButton(wrapper).attributes('disabled')).toBeUndefined()
+  })
+
+  it('shows a validation message when the notes field is left empty', async () => {
+    getSessionById.mockResolvedValue(loungeSession)
+    ;({ wrapper } = await mountForm())
+
+    await wrapper.get('#reservation-notes').trigger('blur')
+
+    expect(wrapper.get('#reservation-notes-error').text()).toBe(
+      'Please tell us your tea or kombucha preferences.',
+    )
+    expect(wrapper.get('#reservation-notes').attributes('aria-invalid')).toBe('true')
+  })
+
+  it('sends the notes for a Kombucha/Tea session', async () => {
+    getSessionById.mockResolvedValue(loungeSession)
+    submitReservation.mockResolvedValue({})
+    ;({ wrapper } = await mountForm())
+
+    await wrapper.get('#reservation-notes').setValue('  Hibiscus Rose, less sugar  ')
+    await wrapper.get('form').trigger('submit')
+    await flushPromises()
+
+    expect(submitReservation).toHaveBeenCalledWith(
+      2,
+      expect.objectContaining({ notes: 'Hibiscus Rose, less sugar' }),
+      'token-123',
+    )
+  })
+
+  it('shows the backend message when the notes are rejected', async () => {
+    getSessionById.mockResolvedValue(loungeSession)
+    submitReservation.mockRejectedValue({
+      response: {
+        status: 400,
+        data: { status: 400, message: 'Please tell us your tea or kombucha preferences.' },
+      },
     })
+    ;({ wrapper } = await mountForm())
+
+    await wrapper.get('#reservation-notes').setValue('Tea')
+    await wrapper.get('form').trigger('submit')
+    await flushPromises()
+
+    expect(wrapper.get('#reservation-notes-error').text()).toBe(
+      'Please tell us your tea or kombucha preferences.',
+    )
+    expect(wrapper.emitted('confirm')).toBeUndefined()
   })
 
   it('shows validation errors and does not emit when a field is empty', async () => {

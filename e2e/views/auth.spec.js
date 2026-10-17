@@ -13,6 +13,7 @@ async function mockLogin(page, expiresIn = 900) {
     expect(route.request().headers().authorization).toBe('Bearer test-token')
     await route.fulfill({ json: user })
   })
+  await page.route('**/api/v1/bookings/me', (route) => route.fulfill({ json: [] }))
 }
 
 async function signIn(page) {
@@ -29,7 +30,7 @@ test('login updates the header, opens dashboard, and logout protects it again', 
   await expect(page.getByRole('heading', { name: 'Your dashboard' })).toBeVisible()
   await expect(page.getByRole('link', { name: 'Elena Pop' })).toBeVisible()
   await expect(page.getByText('elena@example.com', { exact: true })).toBeVisible()
-  await page.getByRole('button', { name: 'Logout' }).click()
+  await page.getByRole('banner').getByRole('button', { name: 'Logout' }).click()
   await expect(page).toHaveURL(/\/$/)
   await page.goto('/dashboard')
   await expect(page).toHaveURL(/\/login$/)

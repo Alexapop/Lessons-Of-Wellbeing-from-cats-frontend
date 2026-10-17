@@ -38,10 +38,40 @@ export async function createSession(session, token) {
   return response.data
 }
 
+// Raw session (with ids for category, guide and hosts) used to pre-fill the edit form.
+export async function getSessionForEdit(id, token) {
+  const response = await api.get(`/sessions/${encodeURIComponent(id)}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+
+  return response.data
+}
+
+export async function updateSession(id, session, token) {
+  const response = await api.put(`/admin/sessions/${encodeURIComponent(id)}`, session, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+
+  return response.data
+}
+
+export async function deleteSession(id, token) {
+  await api.delete(`/admin/sessions/${encodeURIComponent(id)}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+}
+
+export function getDeleteSessionError(error) {
+  if (!error.response) return 'Unable to reach the server. Please try again.'
+  if (error.response.status === 404) return 'This session no longer exists.'
+  return 'Deleting sessions is temporarily unavailable. Please try again later.'
+}
+
 export function getCreateSessionError(error) {
   if (!error.response) return 'Unable to reach the server. Please try again.'
   if (error.response.status === 400) {
     return error.response.data?.message ?? 'Please check the session details.'
   }
-  return 'Creating sessions is temporarily unavailable. Please try again later.'
+  if (error.response.status === 404) return 'This session could not be found.'
+  return 'Saving sessions is temporarily unavailable. Please try again later.'
 }

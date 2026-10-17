@@ -39,6 +39,12 @@ const router = createRouter({
       meta: { requiresAuth: true, requiresAdmin: true },
     },
     {
+      path: '/admin/sessions/:id/edit',
+      name: 'admin-session-edit',
+      component: AdminSessionFormView,
+      meta: { requiresAuth: true, requiresAdmin: true },
+    },
+    {
       path: '/login',
       name: 'login',
       component: LoginView,

@@ -1,11 +1,22 @@
 <script setup>
 import { computed, nextTick, onMounted, reactive, ref } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { createSession, getCreateSessionError, getSessionOptions } from '@/services/adminService.js'
+import {
+  createSession,
+  getCreateSessionError,
+  getSessionForEdit,
+  getSessionOptions,
+  updateSession,
+} from '@/services/adminService.js'
 
 const auth = useAuthStore()
+const route = useRoute()
 const router = useRouter()
+
+// The same form creates a session (/admin/sessions/new) or edits one (/admin/sessions/:id/edit).
+const sessionId = computed(() => route.params.id ?? null)
+const isEditing = computed(() => Boolean(sessionId.value))
 const formElement = ref(null)
 
 const options = ref(null)
@@ -99,13 +110,32 @@ function validateField(name) {
   }
 }
 
+function prefillForm(session) {
+  const [date, time] = session.startDateTime.split('T')
+  form.title = session.title ?? ''
+  form.description = session.description ?? ''
+  form.category = session.category.name
+  form.level = session.level
+  form.location = session.location ?? ''
+  form.date = date
+  form.time = time.slice(0, 5)
+  form.durationMinutes = session.durationMinutes
+  form.guideId = session.guide.id
+  form.hostIds = session.hosts.map((host) => host.id)
+}
+
 async function loadOptions() {
   if (!auth.hasValidSession()) return
   isLoading.value = true
   loadError.value = ''
 
   try {
-    options.value = await getSessionOptions(auth.accessToken)
+    const [loadedOptions, session] = await Promise.all([
+      getSessionOptions(auth.accessToken),
+      isEditing.value ? getSessionForEdit(sessionId.value, auth.accessToken) : null,
+    ])
+    if (session) prefillForm(session)
+    options.value = loadedOptions
   } catch (error) {
     if (error.response?.status === 401) {
       auth.logout()
@@ -115,7 +145,10 @@ async function loadOptions() {
       await router.replace({ name: 'dashboard' })
       return
     }
-    loadError.value = 'We could not load the form options. Please try again.'
+    loadError.value =
+      error.response?.status === 404
+        ? 'This session could not be found.'
+        : 'We could not load the form. Please try again.'
   } finally {
     isLoading.value = false
   }
@@ -138,21 +171,23 @@ async function submitSession() {
 
   isSubmitting.value = true
   try {
-    await createSession(
-      {
-        title: form.title.trim(),
-        description: form.description.trim(),
-        category: form.category,
-        level: form.level,
-        location: form.location.trim(),
-        startDateTime: `${form.date}T${form.time}:00`,
-        durationMinutes: Number(form.durationMinutes),
-        guideId: Number(form.guideId),
-        hostIds: form.hostIds.map(Number),
-      },
-      auth.accessToken,
-    )
-    // Show the new session in the calendar, already filtered by its category.
+    const session = {
+      title: form.title.trim(),
+      description: form.description.trim(),
+      category: form.category,
+      level: form.level,
+      location: form.location.trim(),
+      startDateTime: `${form.date}T${form.time}:00`,
+      durationMinutes: Number(form.durationMinutes),
+      guideId: Number(form.guideId),
+      hostIds: form.hostIds.map(Number),
+    }
+    if (isEditing.value) {
+      await updateSession(sessionId.value, session, auth.accessToken)
+    } else {
+      await createSession(session, auth.accessToken)
+    }
+    // Show the session in the calendar, already filtered by its category.
     await router.push({ name: 'class-calendar', query: { category: calendarCategories[form.category] } })
   } catch (error) {
     if (error.response?.status === 401) {
@@ -171,8 +206,16 @@ onMounted(loadOptions)
 <template>
   <main class="session-form-page" aria-labelledby="session-form-title">
     <RouterLink class="session-form-page__back" :to="{ name: 'admin' }">← Admin dashboard</RouterLink>
-    <h1 id="session-form-title" class="session-form-page__title">Create session</h1>
-    <p class="session-form-page__subtitle">New sessions appear in the class calendar so members can book them.</p>
+    <h1 id="session-form-title" class="session-form-page__title">
+      {{ isEditing ? 'Edit session' : 'Create session' }}
+    </h1>
+    <p class="session-form-page__subtitle">
+      {{
+        isEditing
+          ? 'Changes are shown in the class calendar as soon as you save them.'
+          : 'New sessions appear in the class calendar so members can book them.'
+      }}
+    </p>
 
     <p v-if="isLoading" class="session-form-page__muted" role="status">Loading form...</p>
 
@@ -361,7 +404,8 @@ onMounted(loadOptions)
       <div class="session-form__actions">
         <RouterLink class="session-form-page__secondary" :to="{ name: 'admin' }">Cancel</RouterLink>
         <button class="session-form-page__primary" type="submit" :disabled="isSubmitting">
-          {{ isSubmitting ? 'Creating...' : 'Create Session' }}
+          <template v-if="isEditing">{{ isSubmitting ? 'Saving...' : 'Save Changes' }}</template>
+          <template v-else>{{ isSubmitting ? 'Creating...' : 'Create Session' }}</template>
         </button>
       </div>
 

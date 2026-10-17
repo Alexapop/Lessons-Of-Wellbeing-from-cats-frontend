@@ -52,8 +52,13 @@ onMounted(() => {
   <main class="dashboard" aria-labelledby="dashboard-title">
     <h1 id="dashboard-title" class="visually-hidden">Your dashboard</h1>
 
+    <RouterLink class="dashboard__back" :to="{ name: 'class-calendar' }">← Class calendar</RouterLink>
+
     <p v-if="bookingConfirmed" class="dashboard__success" role="status">
       Your booking is confirmed. We look forward to seeing you!
+      <RouterLink class="dashboard__success-link" :to="{ name: 'class-calendar' }">
+        Back to the class calendar
+      </RouterLink>
     </p>
 
     <div v-if="errorMessage" class="dashboard__error" role="alert">
@@ -114,6 +119,30 @@ onMounted(() => {
   max-width: 1200px;
   margin: 5rem auto;
   min-height: 40vh;
+}
+
+.dashboard__back {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  color: #00664f;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.dashboard__success-link {
+  display: inline-block;
+  margin-left: 0.25rem;
+  color: inherit;
+  text-decoration: underline;
+}
+
+.dashboard__back:focus-visible,
+.dashboard__success-link:focus-visible {
+  outline: 2px solid #00664f;
+  outline-offset: 3px;
 }
 
 .dashboard__success {

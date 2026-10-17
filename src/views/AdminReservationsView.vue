@@ -88,25 +88,25 @@ onMounted(loadBookings)
           </thead>
           <tbody>
             <tr v-for="booking in bookings" :key="booking.id">
-              <td>
+              <td data-label="Member">
                 <span class="admin-reservations__strong">{{ fullName(booking.user) }}</span>
                 <span class="admin-reservations__small">{{ booking.user.email }}</span>
                 <span v-if="booking.user.phoneNumber" class="admin-reservations__small">
                   {{ booking.user.phoneNumber }}
                 </span>
               </td>
-              <td>
+              <td data-label="Session">
                 <span class="admin-reservations__strong">{{ booking.session.title }}</span>
                 <span class="admin-reservations__small">{{ categoryLabels[booking.session.category] }}</span>
               </td>
-              <td>
+              <td data-label="Date &amp; time">
                 <time :datetime="booking.session.date">{{ booking.session.date }}</time>
                 <span class="admin-reservations__small">
                   {{ booking.session.startTime }} – {{ booking.session.endTime }}
                 </span>
               </td>
-              <td>{{ booking.session.location }}</td>
-              <td>
+              <td data-label="Location">{{ booking.session.location }}</td>
+              <td data-label="Status">
                 <span
                   class="admin-reservations__status"
                   :class="`admin-reservations__status--${booking.status.toLowerCase()}`"
@@ -114,7 +114,7 @@ onMounted(loadBookings)
                   {{ statusLabels[booking.status] ?? booking.status }}
                 </span>
               </td>
-              <td class="admin-reservations__notes">
+              <td class="admin-reservations__notes" data-label="Notes">
                 <template v-if="booking.notes">{{ booking.notes }}</template>
                 <span v-else class="admin-reservations__small">—</span>
               </td>
@@ -258,6 +258,93 @@ onMounted(loadBookings)
 .admin-reservations__table-wrapper:focus-visible {
   outline: 2px solid #00664f;
   outline-offset: 3px;
+}
+
+/* Tablets and phones: every reservation becomes a card, so no column is hidden off-screen. */
+@media (max-width: 900px) {
+  .admin-reservations__table-wrapper {
+    overflow-x: visible;
+    border: 0;
+    background-color: transparent;
+  }
+
+  .admin-reservations__table {
+    min-width: 0;
+  }
+
+  .admin-reservations__table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .admin-reservations__table,
+  .admin-reservations__table tbody,
+  .admin-reservations__table tr,
+  .admin-reservations__table td {
+    display: block;
+  }
+
+  .admin-reservations__table tr {
+    margin-bottom: 1rem;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-background);
+  }
+
+  .admin-reservations__table td {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    gap: 0.15rem 0.75rem;
+    padding: 0.7rem 1rem;
+  }
+
+  .admin-reservations__table td::before {
+    grid-row: 1 / span 3;
+  }
+
+  .admin-reservations__status {
+    justify-self: start;
+  }
+
+  .admin-reservations__table tbody tr:last-child td {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .admin-reservations__table tr td:last-child,
+  .admin-reservations__table tbody tr:last-child td:last-child {
+    border-bottom: 0;
+  }
+
+  .admin-reservations__table td::before {
+    content: attr(data-label);
+    color: #78716c;
+    font-size: 0.7rem;
+    font-style: normal;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .admin-reservations__table td > * {
+    grid-column: 2;
+  }
+
+  .admin-reservations__notes {
+    max-width: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-reservations__table td {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.2rem;
+  }
+
+  .admin-reservations__table td > * {
+    grid-column: 1;
+  }
 }
 
 @media (max-width: 700px) {

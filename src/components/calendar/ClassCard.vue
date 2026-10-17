@@ -8,7 +8,13 @@ defineProps({
     type: Object,
     required: true,
   },
+  isDeleting: {
+    type: Boolean,
+    default: false,
+  },
 })
+
+const emit = defineEmits(['delete'])
 
 const auth = useAuthStore()
 const isExpanded = ref(false)
@@ -118,7 +124,25 @@ function toggleDetails() {
         </ul>
       </div>
 
-      <div v-if="!auth.isAdmin" class="class-card__booking">
+      <div v-if="auth.isAdmin" class="class-card__booking">
+        <RouterLink
+          class="class-card__reserve"
+          :to="{ name: 'admin-session-edit', params: { id: classItem.id } }"
+        >
+          Edit session
+        </RouterLink>
+
+        <button
+          class="class-card__reserve class-card__delete"
+          type="button"
+          :disabled="isDeleting"
+          @click="emit('delete', classItem)"
+        >
+          {{ isDeleting ? 'Deleting...' : 'Delete Session' }}
+        </button>
+      </div>
+
+      <div v-else class="class-card__booking">
         <RouterLink
           v-if="auth.isAuthenticated"
           class="class-card__reserve"
@@ -301,6 +325,15 @@ function toggleDetails() {
 .class-card__booking-note {
   color: #78716c;
   font-size: 0.75rem;
+}
+
+.class-card__reserve.class-card__delete {
+  border-color: #fda4af;
+  color: #be123c;
+}
+
+.class-card__reserve.class-card__delete:hover {
+  background-color: #fff1f2;
 }
 
 .class-card__reserve:disabled {

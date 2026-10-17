@@ -26,6 +26,9 @@ const hostLabels = {
   both: 'Both',
 }
 
+// Optional: the sanctuary's Bizum number (VITE_BIZUM_PHONE in .env).
+const bizumPhone = import.meta.env.VITE_BIZUM_PHONE?.trim() ?? ''
+
 const statusLabels = {
   CONFIRMED: 'Confirmed',
   CANCELLED: 'Cancelled',
@@ -83,6 +86,32 @@ const timeRange = computed(
       </p>
 
       <p v-if="booking.notes" class="booking-card__notes">"Note: {{ booking.notes }}"</p>
+
+      <section
+        v-if="isConfirmed"
+        class="booking-card__payment"
+        :aria-labelledby="`booking-payment-${booking.id}`"
+      >
+        <h4 :id="`booking-payment-${booking.id}`" class="booking-card__payment-title">
+          <svg class="booking-card__icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="2" y="6" width="20" height="12" rx="2" />
+            <circle cx="12" cy="12" r="2" />
+            <path d="M6 12h.01M18 12h.01" />
+          </svg>
+          How to pay
+        </h4>
+        <ul class="booking-card__payment-list">
+          <li><strong>Cash</strong> – pay at reception when you arrive.</li>
+          <li>
+            <strong>Bizum</strong> –
+            <template v-if="bizumPhone">
+              send the payment to <span class="booking-card__nowrap">{{ bizumPhone }}</span>
+            </template>
+            <template v-else>ask reception for our Bizum number</template>
+            and add your name and “{{ session.title }}” as the concept.
+          </li>
+        </ul>
+      </section>
     </div>
 
     <button
@@ -219,6 +248,38 @@ const timeRange = computed(
   color: #78716c;
   font-size: 0.8rem;
   font-style: italic;
+}
+
+.booking-card__payment {
+  margin-top: 0.9rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #a7f3d0;
+  background-color: #f0fdf4;
+  color: #14532d;
+  font-size: 0.8rem;
+}
+
+.booking-card__payment-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 0.4rem;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.booking-card__payment-list {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.booking-card__nowrap {
+  white-space: nowrap;
 }
 
 .booking-card__cancel {

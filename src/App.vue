@@ -13,7 +13,7 @@ const userInitial = computed(() => (auth.user?.firstName ?? auth.user?.email ?? 
 
 watch(() => auth.isAuthenticated, (authenticated) => {
   if (authenticated) {
-    bookings.loadMyBookings()
+    if (!auth.isAdmin) bookings.loadMyBookings()
     return
   }
   bookings.reset()
@@ -109,10 +109,11 @@ async function logout() {
           Login
         </RouterLink>
         <div v-else class="user-chip">
-          <RouterLink class="user-chip__link" to="/dashboard">
+          <RouterLink class="user-chip__link" :to="{ name: auth.homeRoute }">
             <span class="user-chip__avatar" aria-hidden="true">{{ userInitial }}</span>
             <span>{{ auth.fullName }}</span>
-            <span class="user-chip__count">
+            <span v-if="auth.isAdmin" class="user-chip__count">Admin</span>
+            <span v-else class="user-chip__count">
               {{ bookings.confirmedCount }}
               <span class="visually-hidden">confirmed reservations</span>
             </span>

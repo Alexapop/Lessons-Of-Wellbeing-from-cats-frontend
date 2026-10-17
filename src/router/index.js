@@ -8,6 +8,7 @@ import { useAuthStore } from '@/stores/auth'
 import RegisterView from '@/views/RegisterView.vue'
 import ReservationView from '@/views/ReservationView.vue'
 import AdminDashboardView from '@/views/AdminDashboardView.vue'
+import AdminReservationsView from '@/views/AdminReservationsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,6 +23,12 @@ const router = createRouter({
       path: '/admin',
       name: 'admin',
       component: AdminDashboardView,
+      meta: { requiresAuth: true, requiresAdmin: true },
+    },
+    {
+      path: '/admin/reservations',
+      name: 'admin-reservations',
+      component: AdminReservationsView,
       meta: { requiresAuth: true, requiresAdmin: true },
     },
     {

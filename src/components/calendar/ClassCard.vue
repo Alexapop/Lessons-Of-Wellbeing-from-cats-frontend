@@ -327,12 +327,12 @@ function toggleDetails() {
   font-size: 0.75rem;
 }
 
-.class-card__delete {
+.class-card__reserve.class-card__delete {
   border-color: #fda4af;
   color: #be123c;
 }
 
-.class-card__delete:hover {
+.class-card__reserve.class-card__delete:hover {
   background-color: #fff1f2;
 }
 

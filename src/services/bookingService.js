@@ -52,6 +52,7 @@ export function getBookingError(error) {
   if (error.response.status === 400) {
     return error.response.data?.message ?? 'Please check your booking details.'
   }
+  if (error.response.status === 403) return 'Admins cannot book sessions.'
   if (error.response.status === 404) return 'This session could not be found.'
   if (error.response.status === 409) return 'You have already booked this session.'
   return 'Booking is temporarily unavailable. Please try again later.'

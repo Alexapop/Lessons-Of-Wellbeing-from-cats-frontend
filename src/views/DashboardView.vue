@@ -5,6 +5,7 @@ import { useAuthStore } from '@/stores/auth'
 import { useBookingsStore } from '@/stores/bookings'
 import UserProfileCard from '@/components/dashboard/UserProfileCard.vue'
 import BookingCard from '@/components/dashboard/BookingCard.vue'
+import { getCancelError } from '@/services/bookingService.js'
 
 const auth = useAuthStore()
 const bookingsStore = useBookingsStore()
@@ -30,9 +31,15 @@ async function logout() {
   auth.logout()
 }
 
-function cancelBooking() {
-  // Cancelling is part of the next story (Cancel Booking); the button is shown already.
-  statusMessage.value = 'Cancelling a booking will be available soon.'
+async function cancelBooking(booking) {
+  statusMessage.value = ''
+  try {
+    await bookingsStore.cancelBooking(booking.id)
+    statusMessage.value = `Your booking for “${booking.session.title}” has been cancelled.`
+  } catch (error) {
+    if (error.response?.status === 401) return
+    statusMessage.value = getCancelError(error)
+  }
 }
 
 onMounted(() => {
@@ -63,7 +70,7 @@ onMounted(() => {
             <rect x="3" y="5" width="18" height="16" rx="2" />
             <path d="M16 3v4M8 3v4M3 11h18" />
           </svg>
-          Your Reservations ({{ bookingsStore.bookings.length }})
+          Your Reservations ({{ bookingsStore.confirmedCount }})
         </h2>
 
         <RouterLink class="dashboard__primary" :to="{ name: 'class-calendar' }">
@@ -93,6 +100,7 @@ onMounted(() => {
           v-for="booking in bookingsStore.bookings"
           :key="booking.id"
           :booking="booking"
+          :is-cancelling="bookingsStore.cancellingId === booking.id"
           @cancel="cancelBooking"
         />
       </div>

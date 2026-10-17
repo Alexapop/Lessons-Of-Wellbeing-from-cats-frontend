@@ -55,6 +55,18 @@ export async function updateSession(id, session, token) {
   return response.data
 }
 
+export async function deleteSession(id, token) {
+  await api.delete(`/admin/sessions/${encodeURIComponent(id)}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+}
+
+export function getDeleteSessionError(error) {
+  if (!error.response) return 'Unable to reach the server. Please try again.'
+  if (error.response.status === 404) return 'This session no longer exists.'
+  return 'Deleting sessions is temporarily unavailable. Please try again later.'
+}
+
 export function getCreateSessionError(error) {
   if (!error.response) return 'Unable to reach the server. Please try again.'
   if (error.response.status === 400) {

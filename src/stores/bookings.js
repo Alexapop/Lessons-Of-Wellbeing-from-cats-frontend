@@ -1,12 +1,13 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
-import { getMyBookings } from '@/services/bookingService.js'
+import { cancelBooking as cancelBookingRequest, getMyBookings } from '@/services/bookingService.js'
 
 export const useBookingsStore = defineStore('bookings', () => {
   const bookings = ref([])
   const isLoading = ref(false)
   const errorMessage = ref('')
+  const cancellingId = ref(null)
 
   const confirmedCount = computed(
     () => bookings.value.filter((booking) => booking.status === 'CONFIRMED').length,
@@ -16,6 +17,27 @@ export const useBookingsStore = defineStore('bookings', () => {
     bookings.value = []
     isLoading.value = false
     errorMessage.value = ''
+    cancellingId.value = null
+  }
+
+  // Replaces the booking with the cancelled version returned by the backend, so the list updates.
+  async function cancelBooking(bookingId) {
+    const auth = useAuthStore()
+    if (!auth.hasValidSession()) return null
+
+    cancellingId.value = bookingId
+    try {
+      const cancelled = await cancelBookingRequest(bookingId, auth.accessToken)
+      bookings.value = bookings.value.map((booking) =>
+        booking.id === cancelled.id ? cancelled : booking,
+      )
+      return cancelled
+    } catch (error) {
+      if (error.response?.status === 401) auth.logout()
+      throw error
+    } finally {
+      cancellingId.value = null
+    }
   }
 
   async function loadMyBookings() {
@@ -40,5 +62,14 @@ export const useBookingsStore = defineStore('bookings', () => {
     }
   }
 
-  return { bookings, isLoading, errorMessage, confirmedCount, reset, loadMyBookings }
+  return {
+    bookings,
+    isLoading,
+    errorMessage,
+    cancellingId,
+    confirmedCount,
+    reset,
+    loadMyBookings,
+    cancelBooking,
+  }
 })

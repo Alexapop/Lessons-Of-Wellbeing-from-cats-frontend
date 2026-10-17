@@ -111,7 +111,7 @@ async function logout() {
         <div v-else class="user-chip">
           <RouterLink class="user-chip__link" :to="{ name: auth.homeRoute }">
             <span class="user-chip__avatar" aria-hidden="true">{{ userInitial }}</span>
-            <span>{{ auth.fullName }}</span>
+            <span class="user-chip__name">{{ auth.fullName }}</span>
             <span v-if="auth.isAdmin" class="user-chip__count">Admin</span>
             <span v-else class="user-chip__count">
               {{ bookings.confirmedCount }}
@@ -165,12 +165,14 @@ async function logout() {
 .user-chip {
   display: inline-flex;
   align-items: center;
+  max-width: 100%;
   border: 1px solid var(--color-border);
 }
 
 .user-chip__link {
   display: inline-flex;
   align-items: center;
+  min-width: 0;
   gap: 0.6rem;
   padding: 0.45rem 0.9rem;
   color: var(--color-text);
@@ -180,6 +182,13 @@ async function logout() {
   text-decoration: none;
   text-transform: uppercase;
   white-space: nowrap;
+}
+
+/* Long names are shortened with "…" so the chip never overflows small phones. */
+.user-chip__name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .user-chip__avatar {
@@ -337,6 +346,21 @@ async function logout() {
   }
 
   .site-nav__link {
+    font-size: 0.7rem;
+  }
+
+  /* Keep the nav and the user chip inside very small screens (320px). */
+  .site-nav {
+    max-width: 100%;
+  }
+
+  .user-chip {
+    min-width: 0;
+  }
+
+  .user-chip__link {
+    gap: 0.4rem;
+    padding: 0.45rem 0.6rem;
     font-size: 0.7rem;
   }
 }

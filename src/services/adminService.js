@@ -21,3 +21,27 @@ export async function getAllBookings(token) {
 
   return response.data.map((booking) => ({ ...toBookingItem(booking), user: booking.user }))
 }
+
+export async function getSessionOptions(token) {
+  const response = await api.get('/admin/session-options', {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+
+  return response.data
+}
+
+export async function createSession(session, token) {
+  const response = await api.post('/admin/sessions', session, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+
+  return response.data
+}
+
+export function getCreateSessionError(error) {
+  if (!error.response) return 'Unable to reach the server. Please try again.'
+  if (error.response.status === 400) {
+    return error.response.data?.message ?? 'Please check the session details.'
+  }
+  return 'Creating sessions is temporarily unavailable. Please try again later.'
+}

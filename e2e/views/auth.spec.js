@@ -36,6 +36,39 @@ test('login updates the header, opens dashboard, and logout protects it again', 
   await expect(page).toHaveURL(/\/login$/)
 })
 
+test('admin login redirects to the admin dashboard', async ({ page }) => {
+  const admin = { ...user, firstName: 'Sanctuary', lastName: 'Admin', role: 'ADMIN' }
+  await page.route('**/api/v1/auth/login', (route) =>
+    route.fulfill({ json: { accessToken: 'admin-token', tokenType: 'Bearer', expiresIn: 900, user: admin } }),
+  )
+  await page.route('**/api/v1/admin/dashboard', async (route) => {
+    expect(route.request().headers().authorization).toBe('Bearer admin-token')
+    await route.fulfill({
+      json: {
+        totalSessions: 8,
+        upcomingSessions: 6,
+        confirmedReservations: 3,
+        cancelledReservations: 1,
+        registeredUsers: 12,
+      },
+    })
+  })
+  await signIn(page)
+  await expect(page).toHaveURL(/\/admin$/)
+  await expect(page.getByRole('heading', { name: 'Admin dashboard' })).toBeVisible()
+  await expect(page.getByText('Registered users')).toBeVisible()
+})
+
+test('a regular user cannot open the admin dashboard', async ({ page }) => {
+  await mockLogin(page)
+  await signIn(page)
+  await expect(page).toHaveURL(/\/dashboard$/)
+  // Navigate inside the app (a full reload would discard the in-memory token).
+  await page.evaluate(() => window.history.pushState({}, '', '/admin'))
+  await page.evaluate(() => window.dispatchEvent(new PopStateEvent('popstate')))
+  await expect(page).toHaveURL(/\/dashboard$/)
+})
+
 test('invalid credentials keep the form open with an error', async ({ page }) => {
   await page.route('**/api/v1/auth/login', (route) =>
     route.fulfill({ status: 401, json: { status: 401, message: 'Invalid email or password.' } }),

@@ -3,6 +3,8 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import ClassCard from './ClassCard.vue'
 import { getUpcomingSessions } from '@/services/sessionService.js'
+import { deleteSession, getDeleteSessionError } from '@/services/adminService.js'
+import { useAuthStore } from '@/stores/auth'
 
 const categories = [
   { value: 'all', label: 'All' },
@@ -30,6 +32,8 @@ const selectedHost = ref(initialFilter(hosts, route.query.host))
 const classes = ref([])
 const isLoading = ref(true)
 const errorMessage = ref('')
+const statusMessage = ref('')
+const deletingId = ref(null)
 
 async function loadSessions() {
   isLoading.value = true
@@ -45,6 +49,33 @@ async function loadSessions() {
 }
 
 onMounted(loadSessions)
+
+// Only admins see the Delete Session button.
+async function removeSession(classItem) {
+  const confirmed = window.confirm(
+    `Delete “${classItem.title}”? It will disappear from the calendar and its reservations will be removed.`,
+  )
+  if (!confirmed) return
+
+  const auth = useAuthStore()
+  if (!auth.hasValidSession()) return
+
+  statusMessage.value = ''
+  deletingId.value = classItem.id
+  try {
+    await deleteSession(classItem.id, auth.accessToken)
+    classes.value = classes.value.filter((item) => item.id !== classItem.id)
+    statusMessage.value = `“${classItem.title}” has been deleted.`
+  } catch (error) {
+    if (error.response?.status === 401) {
+      auth.logout()
+      return
+    }
+    statusMessage.value = getDeleteSessionError(error)
+  } finally {
+    deletingId.value = null
+  }
+}
 
 const filteredClasses = computed(() => {
   return classes.value.filter((classItem) => {
@@ -106,13 +137,21 @@ function resetFilters() {
     </div>
 
     <template v-else>
+      <p v-if="statusMessage" class="class-list__notice" role="status">{{ statusMessage }}</p>
+
       <p class="class-list__count" role="status">
         {{ filteredClasses.length }}
         {{ filteredClasses.length === 1 ? 'session' : 'sessions' }} found
       </p>
 
       <div v-if="filteredClasses.length > 0" class="class-list__grid">
-        <ClassCard v-for="classItem in filteredClasses" :key="classItem.id" :class-item="classItem" />
+        <ClassCard
+          v-for="classItem in filteredClasses"
+          :key="classItem.id"
+          :class-item="classItem"
+          :is-deleting="deletingId === classItem.id"
+          @delete="removeSession"
+        />
       </div>
 
       <div v-else class="class-list__empty">
@@ -181,6 +220,15 @@ function resetFilters() {
 .class-list__filter:focus-visible {
   outline: 2px solid #00664f;
   outline-offset: 4px;
+}
+
+.class-list__notice {
+  margin: 1rem 0 0;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-border);
+  color: var(--color-heading);
+  font-size: 0.875rem;
+  font-weight: 700;
 }
 
 .class-list__count {

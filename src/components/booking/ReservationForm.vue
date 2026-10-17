@@ -3,7 +3,7 @@ import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { getSessionById, getSessionError } from '@/services/sessionService.js'
-import { getReservationError, submitReservation as sendReservation } from '@/services/reservationService.js'
+import { createBooking, getBookingError } from '@/services/bookingService.js'
 
 const props = defineProps({
   sessionId: {
@@ -138,16 +138,17 @@ async function submitReservation() {
 
   isSubmitting.value = true
   try {
-    await sendReservation(session.value.id, reservation, auth.accessToken)
-    emit('confirm', { sessionId: session.value.id, ...reservation })
-    statusMessage.value = `Thank you, ${reservation.name}. Your details for “${session.value.title}” are confirmed.`
+    const booking = { sessionId: session.value.id, ...reservation }
+    await createBooking(booking, auth.accessToken)
+    emit('confirm', booking)
+    await router.push({ name: 'dashboard', query: { booking: 'confirmed' } })
   } catch (error) {
     if (error.response?.status === 401) {
       auth.logout()
       await router.replace({ name: 'login' })
       return
     }
-    statusMessage.value = getReservationError(error)
+    statusMessage.value = getBookingError(error)
     if (error.response?.data?.message === NOTES_MESSAGE) errors.notes = NOTES_MESSAGE
   } finally {
     isSubmitting.value = false

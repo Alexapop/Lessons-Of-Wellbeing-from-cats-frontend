@@ -9,6 +9,7 @@ import RegisterView from '@/views/RegisterView.vue'
 import ReservationView from '@/views/ReservationView.vue'
 import AdminDashboardView from '@/views/AdminDashboardView.vue'
 import AdminReservationsView from '@/views/AdminReservationsView.vue'
+import AdminSessionFormView from '@/views/AdminSessionFormView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,6 +30,12 @@ const router = createRouter({
       path: '/admin/reservations',
       name: 'admin-reservations',
       component: AdminReservationsView,
+      meta: { requiresAuth: true, requiresAdmin: true },
+    },
+    {
+      path: '/admin/sessions/new',
+      name: 'admin-session-new',
+      component: AdminSessionFormView,
       meta: { requiresAuth: true, requiresAdmin: true },
     },
     {
@@ -64,7 +71,8 @@ const router = createRouter({
       path: '/class-calendar/:id/reserve',
       name: 'reservation',
       component: ReservationView,
-      meta: { requiresAuth: true },
+      // Only members book sessions; admins manage them.
+      meta: { requiresAuth: true, forbidsAdmin: true },
     },
   ],
 })
@@ -74,6 +82,7 @@ router.beforeEach((to) => {
   const authenticated = auth.hasValidSession()
   if (to.meta.requiresAuth && !authenticated) return { name: 'login' }
   if (to.meta.requiresAdmin && !auth.isAdmin) return { name: 'dashboard' }
+  if (to.meta.forbidsAdmin && auth.isAdmin) return { name: 'admin' }
   if ((to.name === 'login' || to.name === 'register') && authenticated) {
     return { name: auth.homeRoute }
   }

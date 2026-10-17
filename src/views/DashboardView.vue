@@ -1,10 +1,12 @@
 <script setup>
-import { onMounted, ref } from 'vue'
-import { RouterLink } from 'vue-router'
+import { computed, onMounted, ref } from 'vue'
+import { RouterLink, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
 const auth = useAuthStore()
+const route = useRoute()
 const errorMessage = ref('')
+const bookingConfirmed = computed(() => route.query.booking === 'confirmed')
 
 async function loadProfile() {
   errorMessage.value = ''
@@ -23,6 +25,9 @@ onMounted(loadProfile)
 <template>
   <main class="dashboard">
     <h1>Your dashboard</h1>
+    <p v-if="bookingConfirmed" class="dashboard__success" role="status">
+      Your booking is confirmed. We look forward to seeing you!
+    </p>
     <p>Welcome, {{ auth.fullName }}.</p>
     <p v-if="auth.user">{{ auth.user.email }}</p>
     <div v-if="errorMessage" role="alert">
@@ -39,6 +44,12 @@ onMounted(loadProfile)
   max-width: var(--page-width);
   margin: 3rem auto;
   min-height: 40vh;
+}
+.dashboard__success {
+  padding: 1rem;
+  border: 1px solid #00664f;
+  color: #00664f;
+  font-weight: 700;
 }
 h1 {
   font-family: var(--font-heading);

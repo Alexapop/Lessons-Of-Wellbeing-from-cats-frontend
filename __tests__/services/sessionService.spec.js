@@ -1,6 +1,6 @@
 import { afterEach, describe, it, expect, vi } from 'vitest'
 
-import { getUpcomingSessions, toClassItem } from '@/services/sessionService.js'
+import { getSessionError, getUpcomingSessions, toClassItem } from '@/services/sessionService.js'
 
 const loungeSession = {
   id: 2,
@@ -78,5 +78,15 @@ describe('getUpcomingSessions', () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: 500 }))
 
     await expect(getUpcomingSessions()).rejects.toThrow('status 500')
+  })
+})
+
+describe('getSessionError', () => {
+  it('explains network, 401 and 404 errors', () => {
+    expect(getSessionError({})).toBe('Unable to reach the server. Please try again.')
+    expect(getSessionError({ response: { status: 401 } })).toBe(
+      'Please sign in again to reserve this session.',
+    )
+    expect(getSessionError({ response: { status: 404 } })).toBe('This session could not be found.')
   })
 })

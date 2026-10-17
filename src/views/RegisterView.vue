@@ -2,11 +2,13 @@
 import { nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import HomeSanctuary from './HomeSanctuary.vue'
+import { registerUser, getRegisterError } from '@/services/authService'
 
 const router = useRouter()
 const registerDialog = ref(null)
 const showPassword = ref(false)
 const statusMessage = ref('')
+const isSubmitting = ref(false)
 
 const form = reactive({
   firstName: '',
@@ -100,6 +102,16 @@ function validateField(name) {
     errors.email = 'Enter a valid email address.'
   }
 
+  const maxLength = name === 'phone' ? 20 : 255
+  if (name !== 'password' && value.length > maxLength) {
+    errors[name] = `Use no more than ${maxLength} characters.`
+  }
+
+  if (name === 'password' &&
+      (form.password.length < 8 || new TextEncoder().encode(form.password).length > 72)) {
+    errors.password = 'Use at least 8 characters and no more than 72 bytes for your password.'
+  }
+
   if (name === 'phone') {
     const digits = value.replace(/\D/g, '')
     const validCharacters = /^\+?[\d\s().-]+$/.test(value)
@@ -119,6 +131,7 @@ function handleInput(name) {
 }
 
 async function submitRegister() {
+  if (isSubmitting.value) return
   statusMessage.value = ''
 
   for (const field of fields) {
@@ -136,8 +149,27 @@ async function submitRegister() {
     return
   }
 
-  statusMessage.value =
-    'The form is valid. Account creation is not available yet.'
+  isSubmitting.value = true
+  try {
+    await registerUser({
+      firstName: form.firstName.trim(),
+      lastName: form.lastName.trim(),
+      email: form.email.trim(),
+      phoneNumber: form.phone.trim(),
+      address: form.address.trim(),
+      password: form.password,
+    })
+    await router.push({ name: 'login' })
+  } catch (error) {
+    statusMessage.value = getRegisterError(error)
+    if (error.response?.status === 409) {
+      errors.email = statusMessage.value
+      await nextTick()
+      registerDialog.value?.querySelector('#register-email')?.focus()
+    }
+  } finally {
+    isSubmitting.value = false
+  }
 }
 
 function closeRegister() {
@@ -291,7 +323,9 @@ onBeforeUnmount(() => {
         </p>
       </div>
 
-      <button class="register-submit" type="submit">Create Profile</button>
+      <button class="register-submit" type="submit" :disabled="isSubmitting">
+        {{ isSubmitting ? 'Creating profile...' : 'Create Profile & Access Bookings' }}
+      </button>
 
       <p class="register-status" role="status">{{ statusMessage }}</p>
     </form>

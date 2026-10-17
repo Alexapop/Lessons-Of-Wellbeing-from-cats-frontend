@@ -1,5 +1,7 @@
 <script setup>
 import { ref } from 'vue'
+import { RouterLink } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 
 defineProps({
   classItem: {
@@ -8,6 +10,7 @@ defineProps({
   },
 })
 
+const auth = useAuthStore()
 const isExpanded = ref(false)
 
 const categoryLabels = {
@@ -116,12 +119,15 @@ function toggleDetails() {
       </div>
 
       <div class="class-card__booking">
-        <button
+        <RouterLink
+          v-if="auth.isAuthenticated"
           class="class-card__reserve"
-          type="button"
-          disabled
-          :aria-describedby="`booking-note-${classItem.id}`"
+          :to="{ name: 'reservation', params: { id: classItem.id } }"
         >
+          Reserve
+        </RouterLink>
+
+        <button v-else class="class-card__reserve" type="button" disabled>
           Login to reserve
         </button>
       </div>
@@ -307,6 +313,8 @@ function toggleDetails() {
 }
 
 .class-card__reserve {
+  display: inline-flex;
+  align-items: center;
   max-width: 100%;
   min-height: 2.75rem;
   padding: 0.6rem 1rem;
@@ -318,11 +326,13 @@ function toggleDetails() {
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.05em;
+  text-decoration: none;
   text-transform: uppercase;
   cursor: pointer;
 }
 
-.class-card__toggle:focus-visible {
+.class-card__toggle:focus-visible,
+.class-card__reserve:focus-visible {
   outline: 2px solid #00664f;
   outline-offset: 4px;
 }

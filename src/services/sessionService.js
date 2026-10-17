@@ -1,4 +1,11 @@
+import axios from 'axios'
+
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8080/api/v1'
+
+const api = axios.create({
+  baseURL: API_URL,
+  timeout: 10000,
+})
 
 const categoryValues = {
   YOGA: 'yoga',
@@ -66,4 +73,19 @@ export async function getUpcomingSessions() {
   const sessions = await response.json()
 
   return sessions.map(toClassItem)
+}
+
+export async function getSessionById(id, token) {
+  const response = await api.get(`/sessions/${encodeURIComponent(id)}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+
+  return toClassItem(response.data)
+}
+
+export function getSessionError(error) {
+  if (!error.response) return 'Unable to reach the server. Please try again.'
+  if (error.response.status === 401) return 'Please sign in again to reserve this session.'
+  if (error.response.status === 404) return 'This session could not be found.'
+  return 'We could not load this session. Please try again later.'
 }

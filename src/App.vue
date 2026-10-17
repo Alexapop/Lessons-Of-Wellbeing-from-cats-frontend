@@ -147,9 +147,9 @@ async function logout() {
 .site-header__container {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem 2.5rem;
-  width: calc(100% - 2 * var(--page-gutter));
+  justify-content: space-between;
+  gap: 1.5rem;
+  width: calc(100% - 4rem);
   max-width: var(--page-width);
   margin: 0 auto;
   padding: 1.5rem 0;
@@ -158,8 +158,9 @@ async function logout() {
 .site-nav {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
+  flex-wrap: nowrap;
+  gap: clamp(0.75rem, 1.2vw, 1.5rem);
+  flex-shrink: 0;
 }
 
 .site-nav__link {
@@ -174,6 +175,7 @@ async function logout() {
   letter-spacing: 0.08em;
   text-decoration: none;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .site-nav__link.router-link-exact-active {
@@ -221,6 +223,18 @@ async function logout() {
 .site-nav__join:focus-visible {
   outline: 2px solid #00664f;
   outline-offset: 3px;
+}
+
+@media (max-width: 1199px) {
+  .site-header__container {
+    flex-wrap: wrap;
+    width: calc(100% - 2 * var(--page-gutter));
+  }
+
+  .site-nav {
+    flex-wrap: wrap;
+    flex-shrink: 1;
+  }
 }
 
 @media (max-width: 600px) {

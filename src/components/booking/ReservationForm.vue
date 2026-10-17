@@ -1,8 +1,9 @@
 <script setup>
-import { nextTick, onMounted, reactive, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { getSessionById, getSessionError } from '@/services/sessionService.js'
+import { getReservationError, submitReservation as sendReservation } from '@/services/reservationService.js'
 
 const props = defineProps({
   sessionId: {
@@ -21,18 +22,27 @@ const session = ref(null)
 const isLoading = ref(true)
 const errorMessage = ref('')
 const statusMessage = ref('')
+const isSubmitting = ref(false)
+
+const NOTES_MESSAGE = 'Please tell us your tea or kombucha preferences.'
 
 const form = reactive({
   name: '',
   email: '',
   phone: '',
+  notes: '',
 })
 
 const errors = reactive({
   name: '',
   email: '',
   phone: '',
+  notes: '',
 })
+
+// Kombucha/Tea sessions need drink preferences so the sanctuary can prepare them.
+const requiresNotes = computed(() => session.value?.category === 'lounge')
+const hasMissingNotes = computed(() => requiresNotes.value && !form.notes.trim())
 
 const fields = [
   { name: 'name', label: 'Full name', type: 'text', autocomplete: 'name' },
@@ -90,12 +100,22 @@ function validateField(name) {
   }
 }
 
+function validateNotes() {
+  errors.notes = hasMissingNotes.value ? NOTES_MESSAGE : ''
+}
+
 function handleInput(name) {
   statusMessage.value = ''
   if (errors[name]) validateField(name)
 }
 
+function handleNotesInput() {
+  statusMessage.value = ''
+  if (errors.notes) validateNotes()
+}
+
 async function submitReservation() {
+  if (isSubmitting.value || hasMissingNotes.value) return
   statusMessage.value = ''
 
   for (const field of fields) {
@@ -109,13 +129,29 @@ async function submitReservation() {
     return
   }
 
-  emit('confirm', {
-    sessionId: session.value.id,
+  const reservation = {
     name: form.name.trim(),
     email: form.email.trim(),
     phone: form.phone.trim(),
-  })
-  statusMessage.value = `Thank you, ${form.name.trim()}. Your details for “${session.value.title}” are ready.`
+    notes: requiresNotes.value ? form.notes.trim() : '',
+  }
+
+  isSubmitting.value = true
+  try {
+    await sendReservation(session.value.id, reservation, auth.accessToken)
+    emit('confirm', { sessionId: session.value.id, ...reservation })
+    statusMessage.value = `Thank you, ${reservation.name}. Your details for “${session.value.title}” are confirmed.`
+  } catch (error) {
+    if (error.response?.status === 401) {
+      auth.logout()
+      await router.replace({ name: 'login' })
+      return
+    }
+    statusMessage.value = getReservationError(error)
+    if (error.response?.data?.message === NOTES_MESSAGE) errors.notes = NOTES_MESSAGE
+  } finally {
+    isSubmitting.value = false
+  }
 }
 
 watch(() => auth.user, prefillFromUser, { immediate: true })
@@ -192,12 +228,50 @@ onMounted(loadSession)
           </p>
         </div>
 
+        <div v-if="requiresNotes" class="reservation__field">
+          <label for="reservation-notes">Tea / kombucha preferences *</label>
+          <p id="reservation-notes-help" class="reservation__help">
+            Tell us which drink you would like and any preferences (e.g. less sugar, no caffeine).
+            <template v-if="session.drinks?.length > 0">
+              Available: {{ session.drinks.join(', ') }}.
+            </template>
+          </p>
+          <textarea
+            id="reservation-notes"
+            v-model="form.notes"
+            name="notes"
+            rows="4"
+            maxlength="500"
+            :aria-invalid="Boolean(errors.notes)"
+            :aria-describedby="
+              errors.notes ? 'reservation-notes-help reservation-notes-error' : 'reservation-notes-help'
+            "
+            required
+            @blur="validateNotes"
+            @input="handleNotesInput"
+          ></textarea>
+          <p v-if="errors.notes" id="reservation-notes-error" class="reservation__error" role="alert">
+            {{ errors.notes }}
+          </p>
+        </div>
+
         <div class="reservation__actions">
           <RouterLink class="reservation__secondary" :to="{ name: 'class-calendar' }">
             Back to calendar
           </RouterLink>
-          <button class="reservation__submit" type="submit">Confirm attendance</button>
+          <button
+            class="reservation__submit"
+            type="submit"
+            :disabled="hasMissingNotes || isSubmitting"
+            :aria-describedby="hasMissingNotes ? 'reservation-submit-hint' : undefined"
+          >
+            {{ isSubmitting ? 'Confirming...' : 'Confirm Booking' }}
+          </button>
         </div>
+
+        <p v-if="hasMissingNotes" id="reservation-submit-hint" class="reservation__help">
+          Enter your tea or kombucha preferences to confirm your booking.
+        </p>
 
         <p class="reservation__status" role="status">{{ statusMessage }}</p>
       </form>
@@ -276,7 +350,8 @@ onMounted(loadSession)
   text-transform: uppercase;
 }
 
-.reservation__field input {
+.reservation__field input,
+.reservation__field textarea {
   min-height: 47px;
   padding: 0 14px;
   border: 1px solid var(--color-border);
@@ -286,13 +361,31 @@ onMounted(loadSession)
   font-size: 14px;
 }
 
-.reservation__field input:focus-visible {
+.reservation__field textarea {
+  padding: 12px 14px;
+  resize: vertical;
+}
+
+.reservation__field input:focus-visible,
+.reservation__field textarea:focus-visible {
   outline: 2px solid #00664f;
   outline-offset: 2px;
 }
 
-.reservation__field input[aria-invalid='true'] {
+.reservation__field input[aria-invalid='true'],
+.reservation__field textarea[aria-invalid='true'] {
   border-color: #b42318;
+}
+
+.reservation__help {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+
+.reservation__submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .reservation__error {
@@ -373,7 +466,8 @@ onMounted(loadSession)
     width: 100%;
   }
 
-  .reservation__field input {
+  .reservation__field input,
+  .reservation__field textarea {
     font-size: 16px;
   }
 }

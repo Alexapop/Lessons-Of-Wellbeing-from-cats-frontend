@@ -118,7 +118,16 @@ function toggleDetails() {
         </ul>
       </div>
 
-      <div v-if="!auth.isAdmin" class="class-card__booking">
+      <div v-if="auth.isAdmin" class="class-card__booking">
+        <RouterLink
+          class="class-card__reserve"
+          :to="{ name: 'admin-session-edit', params: { id: classItem.id } }"
+        >
+          Edit session
+        </RouterLink>
+      </div>
+
+      <div v-else class="class-card__booking">
         <RouterLink
           v-if="auth.isAuthenticated"
           class="class-card__reserve"

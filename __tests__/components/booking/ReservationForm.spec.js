@@ -5,16 +5,16 @@ import { createMemoryHistory, createRouter } from 'vue-router'
 import ReservationForm from '@/components/booking/ReservationForm.vue'
 import { useAuthStore } from '@/stores/auth'
 import { getSessionById } from '@/services/sessionService.js'
-import { submitReservation } from '@/services/reservationService.js'
+import { createBooking } from '@/services/bookingService.js'
 
 vi.mock('@/services/sessionService.js', async (importOriginal) => ({
   ...(await importOriginal()),
   getSessionById: vi.fn(),
 }))
 
-vi.mock('@/services/reservationService.js', async (importOriginal) => ({
+vi.mock('@/services/bookingService.js', async (importOriginal) => ({
   ...(await importOriginal()),
-  submitReservation: vi.fn(),
+  createBooking: vi.fn(),
 }))
 
 const Empty = { template: '<div />' }
@@ -50,6 +50,7 @@ async function mountForm() {
     routes: [
       { path: '/', name: 'home', component: Empty },
       { path: '/login', name: 'login', component: Empty },
+      { path: '/dashboard', name: 'dashboard', component: Empty },
       { path: '/class-calendar', name: 'class-calendar', component: Empty },
     ],
   })
@@ -104,10 +105,11 @@ describe('ReservationForm', () => {
     expect(wrapper.get('#reservation-phone').element.value).toBe('+34 612 345 678')
   })
 
-  it('sends the reservation and emits the details when the form is valid', async () => {
+  it('posts the booking and redirects to the dashboard when the form is valid', async () => {
     getSessionById.mockResolvedValue(session)
-    submitReservation.mockResolvedValue({})
-    ;({ wrapper } = await mountForm())
+    createBooking.mockResolvedValue({ id: 10 })
+    let router
+    ;({ wrapper, router } = await mountForm())
 
     await wrapper.get('form').trigger('submit')
     await flushPromises()
@@ -118,8 +120,23 @@ describe('ReservationForm', () => {
       phone: '+34 612 345 678',
       notes: '',
     }
-    expect(submitReservation).toHaveBeenCalledWith(7, details, 'token-123')
+    expect(createBooking).toHaveBeenCalledWith({ sessionId: 7, ...details }, 'token-123')
     expect(wrapper.emitted('confirm')[0][0]).toEqual({ sessionId: 7, ...details })
+    expect(router.currentRoute.value.name).toBe('dashboard')
+    expect(router.currentRoute.value.query.booking).toBe('confirmed')
+  })
+
+  it('stays on the form and shows the error when the booking fails', async () => {
+    getSessionById.mockResolvedValue(session)
+    createBooking.mockRejectedValue({ response: { status: 500 } })
+    let router
+    ;({ wrapper, router } = await mountForm())
+
+    await wrapper.get('form').trigger('submit')
+    await flushPromises()
+
+    expect(wrapper.text()).toContain('Booking is temporarily unavailable. Please try again later.')
+    expect(router.currentRoute.value.name).toBe('home')
   })
 
   it('does not ask for notes on non Kombucha/Tea sessions', async () => {
@@ -159,23 +176,22 @@ describe('ReservationForm', () => {
 
   it('sends the notes for a Kombucha/Tea session', async () => {
     getSessionById.mockResolvedValue(loungeSession)
-    submitReservation.mockResolvedValue({})
+    createBooking.mockResolvedValue({})
     ;({ wrapper } = await mountForm())
 
     await wrapper.get('#reservation-notes').setValue('  Hibiscus Rose, less sugar  ')
     await wrapper.get('form').trigger('submit')
     await flushPromises()
 
-    expect(submitReservation).toHaveBeenCalledWith(
-      2,
-      expect.objectContaining({ notes: 'Hibiscus Rose, less sugar' }),
+    expect(createBooking).toHaveBeenCalledWith(
+      expect.objectContaining({ sessionId: 2, notes: 'Hibiscus Rose, less sugar' }),
       'token-123',
     )
   })
 
   it('shows the backend message when the notes are rejected', async () => {
     getSessionById.mockResolvedValue(loungeSession)
-    submitReservation.mockRejectedValue({
+    createBooking.mockRejectedValue({
       response: {
         status: 400,
         data: { status: 400, message: 'Please tell us your tea or kombucha preferences.' },

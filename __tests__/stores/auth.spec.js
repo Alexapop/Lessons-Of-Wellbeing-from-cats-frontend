@@ -34,6 +34,30 @@ describe('Authentication state', () => {
     expect(auth.isAuthenticated).toBe(false)
   })
 
+  it('detects a regular user and sends them to the dashboard', async () => {
+    const auth = useAuthStore()
+    await auth.login(profile.email, 'password')
+
+    expect(auth.isAdmin).toBe(false)
+    expect(auth.homeRoute).toBe('dashboard')
+  })
+
+  it('detects the admin role and sends admins to /admin', async () => {
+    loginUser.mockResolvedValue({
+      accessToken: 'signed-token',
+      user: { ...profile, role: 'ADMIN' },
+      expiresIn: 900,
+    })
+    const auth = useAuthStore()
+    await auth.login(profile.email, 'password')
+
+    expect(auth.isAdmin).toBe(true)
+    expect(auth.homeRoute).toBe('admin')
+
+    auth.logout()
+    expect(auth.isAdmin).toBe(false)
+  })
+
   it('clears the session when the token expires', async () => {
     const auth = useAuthStore()
     await auth.login(profile.email, 'password')

@@ -10,6 +10,9 @@ export const useAuthStore = defineStore('auth', () => {
   let expirationTimer
 
   const isAuthenticated = computed(() => Boolean(accessToken.value && user.value))
+  // The backend also checks the ADMIN role from the JWT, this only decides what the UI shows.
+  const isAdmin = computed(() => isAuthenticated.value && user.value?.role === 'ADMIN')
+  const homeRoute = computed(() => (isAdmin.value ? 'admin' : 'dashboard'))
   const fullName = computed(() =>
     [user.value?.firstName, user.value?.lastName].filter(Boolean).join(' '),
   )
@@ -53,5 +56,16 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  return { accessToken, user, fullName, isAuthenticated, login, logout, hasValidSession, refreshUser }
+  return {
+    accessToken,
+    user,
+    fullName,
+    isAuthenticated,
+    isAdmin,
+    homeRoute,
+    login,
+    logout,
+    hasValidSession,
+    refreshUser,
+  }
 })

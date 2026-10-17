@@ -1,14 +1,23 @@
 <script setup>
-import { watch } from 'vue'
+import { computed, watch } from 'vue'
 import { RouterLink, RouterView, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useBookingsStore } from '@/stores/bookings'
 import Footer from './components/layout/Footer.vue'
 import Logo from './components/layout/Logo.vue'
 const auth = useAuthStore()
+const bookings = useBookingsStore()
 const router = useRouter()
 
+const userInitial = computed(() => (auth.user?.firstName ?? auth.user?.email ?? '?').charAt(0).toUpperCase())
+
 watch(() => auth.isAuthenticated, (authenticated) => {
-  if (!authenticated && router.currentRoute.value.meta.requiresAuth) {
+  if (authenticated) {
+    if (!auth.isAdmin) bookings.loadMyBookings()
+    return
+  }
+  bookings.reset()
+  if (router.currentRoute.value.meta.requiresAuth) {
     router.replace({ name: 'login' })
   }
 })
@@ -99,12 +108,31 @@ async function logout() {
           </svg>
           Login
         </RouterLink>
-        <template v-else>
-          <RouterLink class="site-nav__link" to="/dashboard">{{ auth.fullName }}</RouterLink>
-          <button class="site-nav__link site-nav__login logout-button" type="button" @click="logout">
-            Logout
+        <div v-else class="user-chip">
+          <RouterLink class="user-chip__link" :to="{ name: auth.homeRoute }">
+            <span class="user-chip__avatar" aria-hidden="true">{{ userInitial }}</span>
+            <span>{{ auth.fullName }}</span>
+            <span v-if="auth.isAdmin" class="user-chip__count">Admin</span>
+            <span v-else class="user-chip__count">
+              {{ bookings.confirmedCount }}
+              <span class="visually-hidden">confirmed reservations</span>
+            </span>
+          </RouterLink>
+          <button class="user-chip__logout" type="button" aria-label="Logout" title="Logout" @click="logout">
+            <svg
+              class="site-nav__icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M10 3H4v18h6M21 12H9M15 6l6 6-6 6" />
+            </svg>
           </button>
-        </template>
+        </div>
         <RouterLink
           v-if="!auth.isAuthenticated"
           class="site-nav__link site-nav__join"
@@ -134,10 +162,73 @@ async function logout() {
 </template>
 
 <style scoped>
-.logout-button {
+.user-chip {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--color-border);
+}
+
+.user-chip__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.45rem 0.9rem;
+  color: var(--color-text);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.user-chip__avatar {
+  display: grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background-color: var(--color-text);
+  color: #ffffff;
+  font-size: 0.75rem;
+}
+
+.user-chip__count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.4rem;
+  height: 1.4rem;
+  padding: 0 0.3rem;
+  background-color: var(--color-text);
+  color: #ffffff;
+  font-size: 0.7rem;
+}
+
+.user-chip__logout {
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  padding: 0 0.75rem;
+  border: 0;
+  border-left: 1px solid var(--color-border);
   background: transparent;
-  font-family: inherit;
+  color: #78716c;
   cursor: pointer;
+}
+
+.user-chip__link:focus-visible,
+.user-chip__logout:focus-visible {
+  outline: 2px solid #00664f;
+  outline-offset: 2px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 .site-header {
   border-bottom: 1px solid var(--color-border);

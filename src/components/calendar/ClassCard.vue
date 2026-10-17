@@ -118,7 +118,7 @@ function toggleDetails() {
         </ul>
       </div>
 
-      <div class="class-card__booking">
+      <div v-if="!auth.isAdmin" class="class-card__booking">
         <RouterLink
           v-if="auth.isAuthenticated"
           class="class-card__reserve"

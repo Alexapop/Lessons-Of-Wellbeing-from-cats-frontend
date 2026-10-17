@@ -53,7 +53,7 @@ onMounted(loadSessions)
 // Only admins see the Delete Session button.
 async function removeSession(classItem) {
   const confirmed = window.confirm(
-    `Delete “${classItem.title}”? It will disappear from the calendar and its reservations will be removed.`,
+    `Delete “${classItem.title}”? It will disappear from the calendar and its reservations will be marked as cancelled.`,
   )
   if (!confirmed) return
 
